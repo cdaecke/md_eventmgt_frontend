@@ -1,0 +1,15 @@
+plugin.tx_mdeventmgtfrontend_frontend {
+  view {
+    # cat=plugin.tx_mdeventmgtfrontend_frontend/file; type=string; label=Path to template root (FE)
+    templateRootPath = EXT:md_eventmgt_frontend/Resources/Private/Templates/
+    # cat=plugin.tx_mdeventmgtfrontend_frontend/file; type=string; label=Path to template partials (FE)
+    partialRootPath = EXT:md_eventmgt_frontend/Resources/Private/Partials/
+    # cat=plugin.tx_mdeventmgtfrontend_frontend/file; type=string; label=Path to template layouts (FE)
+    layoutRootPath = EXT:md_eventmgt_frontend/Resources/Private/Layouts/
+  }
+
+  persistence {
+    # cat=plugin.tx_mdeventmgtfrontend_frontend//a; type=string; label=Default storage PID
+    storagePid =
+  }
+}

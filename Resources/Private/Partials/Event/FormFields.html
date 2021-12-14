@@ -1,0 +1,178 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+    <fieldset>
+        <legend><f:translate key="legend.general" /></legend>
+        <div class="row">
+            <div class="form-group col-md-6 col">
+                <label for="startdate"><f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.startdate" /></label>
+                <f:form.textfield
+                    property="startdate"
+                    value="{event.startdate -> f:format.date(format: '{settings.dateFormat.{settings.selectedDateFormat}.format}')}"
+                    id="startdate"
+                    class="form-control"
+                    additionalAttributes="{placeholder:'{settings.dateFormat.{settings.selectedDateFormat}.placeholder}', data-parsley-trigger:'change focusout', required:''}" />
+            </div>
+
+            <f:if condition="{settings.selectedDateFormat} == 'time'">
+                <div class="form-group col-md-6 col">
+                    <label for="enddate"><f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.enddate" /></label>
+                    <f:form.textfield
+                        property="enddate"
+                        value="{event.enddate -> f:format.date(format: '{settings.dateFormat.{settings.selectedDateFormat}.format}')}"
+                        id="enddate"
+                        class="form-control"
+                        additionalAttributes="{placeholder:'{settings.dateFormat.{settings.selectedDateFormat}.placeholder}', data-parsley-trigger:'change focusout', required:''}" />
+                </div>
+            </f:if>
+        </div>
+
+        <div class="form-group">
+            <label for="title">
+                <f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.title"/>
+            </label>
+            <f:form.textfield
+                property="title"
+                id="title"
+                class="form-control"
+                additionalAttributes="{data-parsley-trigger:'change focusout', required:''}"/>
+        </div>
+
+        <div class="form-group">
+            <label for="teaser">
+                <f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.teaser"/>
+            </label>
+            <f:form.textarea
+                property="teaser"
+                id="teaser"
+                class="form-control"/>
+        </div>
+
+        <div class="form-group">
+            <label for="description">
+                <f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.description"/>
+            </label>
+            <f:form.textarea
+                property="description"
+                id="description"
+                rows="5"
+                class="form-control tinymce"/>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend><f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:event.tabs.additional" /></legend>
+
+        <div class="row">
+            <div class="form-group col-md-6 col">
+                <label for="price">
+                    <f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.price"/>
+                </label>
+                <f:form.textfield
+                    property="price"
+                    id="price"
+                    class="form-control" />
+            </div>
+            <div class="form-group col-md-6 col">
+                <label for="currency">
+                    <f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.currency"/>
+                </label>
+                <f:form.textfield
+                    property="currency"
+                    id="currency"
+                    class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="link">
+                <f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.link"/>
+            </label>
+            <f:form.textfield
+                property="link"
+                id="link"
+                class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="program">
+                <f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.program"/>
+            </label>
+            <f:form.textarea
+                property="program"
+                id="program"
+                rows="5"
+                class="form-control tinymce"/>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend><f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:event.tabs.relations" /></legend>
+        <f:if condition="{categories}">
+            <div class="form-group">
+                <label for="categories"><f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:event.tabs.category" /></label>
+                <f:form.select
+                    property="category"
+                    options="{categories}"
+                    optionValueField="uid"
+                    optionLabelField="title"
+                    id="categories"
+                    class="form-control"
+                    multiple="multiple"
+                    size="3"
+                    additionalAttributes="{aria-describedby:'categoriesHelp'}" />
+                <small id="categoriesHelp" class="form-text text-muted"><f:translate key="event.categoriesHelp" /></small>
+            </div>
+        </f:if>
+        <f:if condition="{locations}">
+            <div class="form-group">
+                <label for="locations"><f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.location" /></label>
+                <f:form.select
+                    property="location"
+                    options="{locations}"
+                    optionValueField="uid"
+                    optionLabelField="title"
+                    id="locations"
+                    class="form-control"
+                    size="1" />
+            </div>
+        </f:if>
+        <f:if condition="{organisators}">
+            <div class="form-group">
+                <label for="organisators"><f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.organisator" /></label>
+                <f:form.select
+                    property="organisator"
+                    options="{organisators}"
+                    optionValueField="uid"
+                    optionLabelField="name"
+                    id="organisators"
+                    class="form-control"
+                    size="1" />
+            </div>
+        </f:if>
+        <f:if condition="{speakers}">
+            <div class="form-group">
+                <label for="speakers"><f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.speaker" /></label>
+                <f:form.select
+                    property="speaker"
+                    options="{speakers}"
+                    optionValueField="uid"
+                    optionLabelField="name"
+                    id="speakers"
+                    class="form-control"
+                    multiple="multiple"
+                    size="3" />
+            </div>
+        </f:if>
+        <f:if condition="{relatedEvents}">
+            <div class="form-group">
+                <label for="speakers"><f:translate key="LLL:EXT:sf_event_mgt/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgt_domain_model_event.related" /></label>
+                <f:form.select
+                    property="related"
+                    options="{relatedEvents}"
+                    optionValueField="uid"
+                    optionLabelField="title"
+                    id="relatedEvents"
+                    class="form-control"
+                    multiple="multiple"
+                    size="3" />
+            </div>
+        </f:if>
+    </fieldset>
+</html>

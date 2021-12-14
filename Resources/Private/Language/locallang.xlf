@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf" date="2021-11-24T12:07:45Z" product-name="md_eventmgt_frontend">
+		<header/>
+		<body>
+			<trans-unit id="tx_mdeventmgtfrontend_domain_model_event" resname="tx_mdeventmgtfrontend_domain_model_event">
+				<source>Event</source>
+			</trans-unit>
+			<trans-unit id="tx_mdeventmgtfrontend_domain_model_event.md_eventmgt_feuser" resname="tx_mdeventmgtfrontend_domain_model_event.md_eventmgt_feuser">
+				<source>Md Eventmgt Feuser</source>
+			</trans-unit>
+
+			<trans-unit id="tca.tab" resname="tca.tab">
+				<source>User</source>
+			</trans-unit>
+			<trans-unit id="tca.md_eventmgt_feuser" resname="tca.md_eventmgt_feuser">
+				<source>Frontend user</source>
+			</trans-unit>
+
+			<trans-unit id="flexform.frontend.title" resname="flexform.frontend.title">
+				<source>Settings</source>
+			</trans-unit>
+			<trans-unit id="flexform.frontend.allDay" resname="flexform.frontend.allDay">
+				<source>All day events</source>
+			</trans-unit>
+			<trans-unit id="flexform.frontend.time" resname="flexform.frontend.time">
+				<source>Start- and end date and time</source>
+			</trans-unit>
+			<trans-unit id="flexform.frontend.parentCategory" resname="flexform.frontend.parentCategory">
+				<source>Parent category</source>
+			</trans-unit>
+			<trans-unit id="flexform.frontend.locationStoragePid" resname="flexform.frontend.locationStoragePid">
+				<source>Location storage page</source>
+			</trans-unit>
+			<trans-unit id="flexform.frontend.organisatorStoragePid" resname="flexform.frontend.organisatorStoragePid">
+				<source>Organisator storage page</source>
+			</trans-unit>
+			<trans-unit id="flexform.frontend.speakerStoragePid" resname="flexform.frontend.speakerStoragePid">
+				<source>Speaker storages</source>
+			</trans-unit>
+			<trans-unit id="flexform.frontend.relatedStoragePid" resname="flexform.frontend.relatedStoragePid">
+				<source>Related events storage page</source>
+			</trans-unit>
+
+			<trans-unit id="legend.general" resname="legend.general">
+				<source>General:</source>
+			</trans-unit>
+
+			<trans-unit id="new_event" resname="new_event">
+				<source>New event</source>
+			</trans-unit>
+			<trans-unit id="list_event" resname="list_event">
+				<source>List events</source>
+			</trans-unit>
+			<trans-unit id="edit_event" resname="edit_event">
+				<source>Edit Event</source>
+			</trans-unit>
+			<trans-unit id="access_denied" resname="access_denied">
+				<source>Access denied</source>
+			</trans-unit>
+
+			<trans-unit id="save" resname="save">
+				<source>Save</source>
+			</trans-unit>
+			<trans-unit id="or" resname="or">
+				<source>or</source>
+			</trans-unit>
+			<trans-unit id="back_to_list" resname="back_to_list">
+				<source>Back to list</source>
+			</trans-unit>
+			<trans-unit id="new" resname="new">
+				<source>Create new</source>
+			</trans-unit>
+			<trans-unit id="edit" resname="edit">
+				<source>Edit</source>
+			</trans-unit>
+			<trans-unit id="delete" resname="delete">
+				<source>Delete</source>
+			</trans-unit>
+			<trans-unit id="please_login" resname="please_login">
+				<source>Please login as a frontend user in order to use this functionality.</source>
+			</trans-unit>
+
+			<trans-unit id="modal.title" resname="modal.title">
+				<source>Delete entry</source>
+			</trans-unit>
+			<trans-unit id="modal.close" resname="modal.close">
+				<source>Close</source>
+			</trans-unit>
+			<trans-unit id="modal.delete" resname="modal.delete">
+				<source>Delete</source>
+			</trans-unit>
+			<trans-unit id="modal.text" resname="modal.text">
+				<source>Do you really want to delete this event?</source>
+			</trans-unit>
+
+			<trans-unit id="no_items" resname="no_items">
+				<source>No items found.</source>
+			</trans-unit>
+
+			<trans-unit id="pagination.overall" resname="pagination.overall">
+				<source>Page %s of %s</source>
+			</trans-unit>
+			<trans-unit id="pagination.first" resname="pagination.first">
+				<source>First</source>
+			</trans-unit>
+			<trans-unit id="pagination.last" resname="">
+				<source>Last</source>
+			</trans-unit>
+			<trans-unit id="pagination.previous" resname="pagination.previous">
+				<source>Previous</source>
+			</trans-unit>
+			<trans-unit id="pagination.next" resname="pagination.next">
+				<source>Next</source>
+			</trans-unit>
+
+			<trans-unit id="controller.created" resname="controller.created">
+				<source>The event was successfully created.</source>
+			</trans-unit>
+			<trans-unit id="controller.updated" resname="controller.updated">
+				<source>The event was successfully updated.</source>
+			</trans-unit>
+			<trans-unit id="controller.deleted" resname="controller.deleted">
+				<source>The event was successfully deleted.</source>
+			</trans-unit>
+			<trans-unit id="controller.created" resname="controller.created">
+				<source>An error occurred</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

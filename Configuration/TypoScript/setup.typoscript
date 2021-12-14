@@ -1,0 +1,47 @@
+plugin.tx_mdeventmgtfrontend_frontend {
+  view {
+    templateRootPaths.0 = EXT:md_eventmgt_frontend/Resources/Private/Templates/
+    templateRootPaths.1 = {$plugin.tx_mdeventmgtfrontend_frontend.view.templateRootPath}
+    partialRootPaths.0 = EXT:md_eventmgt_frontend/Resources/Private/Partials/
+    partialRootPaths.1 = {$plugin.tx_mdeventmgtfrontend_frontend.view.partialRootPath}
+    layoutRootPaths.0 = EXT:md_eventmgt_frontend/Resources/Private/Layouts/
+    layoutRootPaths.1 = {$plugin.tx_mdeventmgtfrontend_frontend.view.layoutRootPath}
+  }
+
+  persistence {
+    #storagePid = {$plugin.tx_mdeventmgtfrontend_frontend.persistence.storagePid}
+    #recursive = 1
+  }
+
+  features {
+    #skipDefaultArguments = 1
+    # if set to 1, the enable fields are ignored in BE context
+    ignoreAllEnableFieldsInBe = 0
+  }
+
+  mvc {
+    #callDefaultActionIfActionCantBeResolved = 1
+  }
+
+  settings {
+    dateFormat {
+      allDay {
+        format = d.m.Y
+        placeholder = dd.mm.YYYY
+      }
+
+      time {
+        format = d.m.Y H:i
+        placeholder = dd.mm.YYYY HH:ii
+      }
+    }
+
+    paginate {
+      itemsPerPage = 10
+      insertAbove = 0
+      insertBelow = 1
+      maximumNumberOfLinks = 6
+      addQueryStringMethod = GET
+    }
+  }
+}

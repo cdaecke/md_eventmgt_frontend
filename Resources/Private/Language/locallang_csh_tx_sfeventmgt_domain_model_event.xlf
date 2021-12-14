@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:md_eventmgt_frontend/Resources/Private/Language/locallang_csh_tx_sfeventmgt_domain_model_event.xlf" date="2021-11-24T12:07:45Z" product-name="md_eventmgt_frontend">
+		<header/>
+		<body>
+			<trans-unit id="md_eventmgt_feuser.description" resname="md_eventmgt_feuser.description">
+				<source>Frontend user, who has created the event</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
