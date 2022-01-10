@@ -102,5 +102,37 @@
                 </el>
             </ROOT>
         </sDEF>
+
+        <!-- Sheet: Template -->
+        <template>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.tab.template</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+
+                    <!-- Template Layout -->
+                    <settings.templateLayout>
+                        <TCEforms>
+                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.templateLayout</label>
+                            <config>
+                                <type>select</type>
+                                <renderType>selectSingle</renderType>
+                                <itemsProcFunc>Mediadreams\MdEventmgtFrontend\Hooks\TemplateLayouts->getTemplateLayouts</itemsProcFunc>
+                                <items>
+                                    <numIndex index="0" type="array">
+                                        <numIndex index="0"></numIndex>
+                                        <numIndex index="1"></numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </settings.templateLayout>
+
+                </el>
+            </ROOT>
+        </template>
+
     </sheets>
 </T3DataStructure>

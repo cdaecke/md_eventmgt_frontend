@@ -42,6 +42,13 @@
 				<source>Related events storage page</source>
 			</trans-unit>
 
+			<trans-unit id="flexform.tab.template" resname="flexform.tab.template">
+				<source>Template</source>
+			</trans-unit>
+			<trans-unit id="flexform.templateLayout" resname="flexform.templateLayout">
+				<source>Template layout</source>
+			</trans-unit>
+
 			<trans-unit id="legend.general" resname="legend.general">
 				<source>General:</source>
 			</trans-unit>
@@ -122,9 +129,6 @@
 			</trans-unit>
 			<trans-unit id="controller.deleted" resname="controller.deleted">
 				<source>The event was successfully deleted.</source>
-			</trans-unit>
-			<trans-unit id="controller.created" resname="controller.created">
-				<source>An error occurred</source>
 			</trans-unit>
 		</body>
 	</file>
