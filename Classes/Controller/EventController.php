@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Mediadreams\MdEventmgtFrontend\Controller;
@@ -14,6 +13,10 @@ namespace Mediadreams\MdEventmgtFrontend\Controller;
  */
 
 use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
+use Mediadreams\MdEventmgtFrontend\Event\CreateActionAfterPersistEvent;
+use Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent;
+use Mediadreams\MdEventmgtFrontend\Event\DeleteActionBeforeDeleteEvent;
+use Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSaveEvent;
 use Mediadreams\MdEventmgtFrontend\Service\SlugService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -86,6 +89,11 @@ class EventController extends AbstractController
     public function newAction(): void
     {
         $this->assignAdditionalData();
+
+        // Allow to pass data via link to form
+        // Example: <f:link.action action="new" controller="Event" arguments="{title:'myTitle'}">New myTitle</f:link.action>
+        $arguments = $this->request->getArguments();
+        $this->view->assign('event', $arguments);
     }
 
     /**
@@ -101,6 +109,10 @@ class EventController extends AbstractController
     {
         $event->setMdEventmgtFeuser($this->feUser['uid']);
         $this->setTime($event);
+
+        // PSR-14 Event
+        $this->eventDispatcher->dispatch(new CreateActionBeforeSaveEvent($event, $this));
+
         $this->eventRepository->add($event);
 
         // Persist event in order to get the uid of the entry
@@ -109,6 +121,10 @@ class EventController extends AbstractController
         // Add slug
         $slug = $this->slugService->getSlug($event);
         $event->setSlug($slug);
+
+        // PSR-14 Event
+        $this->eventDispatcher->dispatch(new CreateActionAfterPersistEvent($event, $this));
+
         $this->eventRepository->update($event);
 
         $this->addFlashMessage(
@@ -145,6 +161,10 @@ class EventController extends AbstractController
     public function updateAction(Event $event): void
     {
         $this->setTime($event);
+
+        // PSR-14 Event
+        $this->eventDispatcher->dispatch(new UpdateActionBeforeSaveEvent($event, $this));
+
         $this->eventRepository->update($event);
 
         $this->addFlashMessage(
@@ -166,6 +186,9 @@ class EventController extends AbstractController
      */
     public function deleteAction(Event $event): void
     {
+        // PSR-14 Event
+        $this->eventDispatcher->dispatch(new DeleteActionBeforeDeleteEvent($event, $this));
+
         $this->addFlashMessage(
             LocalizationUtility::translate('controller.deleted', 'md_eventmgt_frontend'),
             '',
