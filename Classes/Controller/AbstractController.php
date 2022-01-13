@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Mediadreams\MdEventmgtFrontend\Controller;
@@ -19,10 +18,12 @@ use DERHANSEN\SfEventMgt\Domain\Repository\SpeakerRepository;
 use GeorgRinger\NumberedPagination\NumberedPagination;
 use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\EventRepository;
+use Mediadreams\MdEventmgtFrontend\Service\EmailService;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -33,6 +34,13 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 abstract class AbstractController extends ActionController
 {
+    /**
+     * emailService
+     *
+     * @var EmailService
+     */
+    public $emailService;
+
     /**
      * Frontend user data
      *
@@ -116,6 +124,14 @@ abstract class AbstractController extends ActionController
     }
 
     /**
+     * @param EmailService $slugService
+     */
+    public function injectEmailService(EmailService $emailService)
+    {
+        $this->emailService = $emailService;
+    }
+
+    /**
      * Deactivate errorFlashMessage
      *
      * @return bool|string
@@ -171,10 +187,50 @@ abstract class AbstractController extends ActionController
     }
 
     /**
+     * Send emails
+     * This will loop through all configured emails settings and send emails accordingly
+     *
+     * @param array $data
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function sendEmails(array $data)
+    {
+        $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
+        );
+
+        if ($this->settings['emailNotification'] == 1) {
+            foreach ($this->settings['emailItems'] as $emails) {
+                if ($this->actionMethodName == $emails['container']['template']) {
+                    $dataArr = [
+                        'email' => $emails['container']['email'],
+                        'name' => $emails['container']['name'],
+                        'body' => $emails['container']['body']
+                    ];
+                    $dataArr = array_merge($dataArr, $data);
+
+                    $this->emailService->sendEmail(
+                        ['email' => $this->settings['emailFrom'], 'name' => $this->settings['emailFromName']],
+                        ['email' => $emails['container']['email'], 'name' => $emails['container']['name']],
+                        $emails['container']['subject'],
+                        $emails['container']['template'],
+                        $dataArr,
+                        $this->settings,
+                        $this->controllerContext,
+                        $extbaseFrameworkConfiguration
+                    );
+                }
+            }
+        }
+    }
+
+    /**
      * Assign additional data to template
      */
     protected function assignAdditionalData(): void
     {
+        $this->view->assign('feUser', $this->feUser);
+
         if (isset($this->settings['parentCategory']) && strlen($this->settings['parentCategory']) > 0) {
             $this->categoryRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
             $categories = $this->categoryRepository->findByParent($this->settings['parentCategory']);
@@ -241,10 +297,6 @@ abstract class AbstractController extends ActionController
     {
         if ($this->settings['selectedDateFormat'] == 'allDay') {
             $event->getStartdate()->setTime(0, 0, 0, 0);
-
-            if ($event->getEnddate()) {
-                $event->getEnddate()->setTime(0, 0, 0, 0);
-            }
         }
     }
 }

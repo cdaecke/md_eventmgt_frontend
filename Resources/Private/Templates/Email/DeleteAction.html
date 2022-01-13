@@ -1,0 +1,10 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Email" />
+
+<f:section name="content">
+    {body -> f:format.html()}
+
+    <p>----------</p>
+    <f:render partial="Email/EventData" arguments="{event:event, feUser:feUser}" />
+</f:section>
+</html>

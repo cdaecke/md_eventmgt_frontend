@@ -49,6 +49,52 @@
 				<source>Template layout</source>
 			</trans-unit>
 
+			<trans-unit id="flexform.tab.email" resname="flexform.tab.email">
+				<source>Email</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailNotification" resname="flexform.emailNotification">
+				<source>Enable email notification</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailNotification.enable" resname="flexform.emailNotification.enable">
+				<source>Enable</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailFrom" resname="flexform.emailFrom">
+				<source>Email address of sender</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailFromName" resname="flexform.emailFromName">
+				<source>Name of sender</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailReceivers" resname="flexform.emailReceivers">
+				<source>Email receivers</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailReceivers.add" resname="flexform.emailReceivers.add">
+				<source>Add email receiver</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailTo.email" resname="flexform.emailTo.email">
+				<source>Email address of receiver</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailTo.name" resname="flexform.emailTo.name">
+				<source>Name of receiver</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailTo.subject" resname="flexform.emailTo.subject">
+				<source>Subject of email</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailTo.body" resname="flexform.emailTo.body">
+				<source>Text in email</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailTo.template" resname="flexform.emailTo.template">
+				<source>Email for action</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailTo.template.create" resname="flexform.emailTo.template.create">
+				<source>New event created</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailTo.template.update" resname="flexform.emailTo.template.update">
+				<source>Event was update</source>
+			</trans-unit>
+			<trans-unit id="flexform.emailTo.template.delete" resname="flexform.emailTo.template.delete">
+				<source>Event was deleted</source>
+			</trans-unit>
+
 			<trans-unit id="legend.general" resname="legend.general">
 				<source>General:</source>
 			</trans-unit>

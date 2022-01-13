@@ -127,6 +127,9 @@ class EventController extends AbstractController
 
         $this->eventRepository->update($event);
 
+        // Send notification emails
+        $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
+
         $this->addFlashMessage(
             LocalizationUtility::translate('controller.created', 'md_eventmgt_frontend'),
             '',
@@ -167,6 +170,9 @@ class EventController extends AbstractController
 
         $this->eventRepository->update($event);
 
+        // Send notification emails
+        $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
+
         $this->addFlashMessage(
             LocalizationUtility::translate('controller.updated', 'md_eventmgt_frontend'),
             '',
@@ -188,6 +194,9 @@ class EventController extends AbstractController
     {
         // PSR-14 Event
         $this->eventDispatcher->dispatch(new DeleteActionBeforeDeleteEvent($event, $this));
+
+        // Send notification emails
+        $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
 
         $this->addFlashMessage(
             LocalizationUtility::translate('controller.deleted', 'md_eventmgt_frontend'),

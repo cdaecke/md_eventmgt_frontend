@@ -1,0 +1,34 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<h3>Event data</h3>
+
+<dl>
+    <dt>Event of:</dt>
+    <dd>{feUser.name}</dd>
+
+    <dt>Event Id:</dt>
+    <dd>{event.uid}</dd>
+
+    <dt>Date:</dt>
+    <dd>
+        {event.startdate -> f:format.date(format:"d.m.Y")}
+        <f:if condition="{event.enddate}">
+            until {event.enddate -> f:format.date(format: '{settings.dateFormat.{settings.selectedDateFormat}.format}')}
+        </f:if>
+    </dd>
+
+    <f:if condition="{event.title}">
+        <dt>Title:</dt>
+        <dd>{event.title}</dd>
+    </f:if>
+
+    <f:if condition="{event.teaser}">
+        <dt>Teaser:</dt>
+        <dd>{event.teaser}</dd>
+    </f:if>
+
+    <f:if condition="{event.description}">
+        <dt>Description:</dt>
+        <dd>{event.description -> f:format.html()}</dd>
+    </f:if>
+</dl>
+</html>

@@ -103,6 +103,138 @@
             </ROOT>
         </sDEF>
 
+        <!-- Sheet: Email -->
+        <email>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.tab.email</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+
+                    <settings.emailNotification>
+                        <TCEforms>
+                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailNotification</label>
+                            <onChange>reload</onChange>
+                            <config>
+                                <type>check</type>
+                                <default>0</default>
+                                <items type="array">
+                                    <numIndex index="0" type="array">
+                                        <numIndex index="0">LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailNotification.enable</numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </settings.emailNotification>
+
+                    <settings.emailFrom>
+                        <TCEforms>
+                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailFrom</label>
+                            <displayCond>FIELD:settings.emailNotification:REQ:true</displayCond>
+                            <config>
+                                <type>input</type>
+                                <size>20</size>
+                                <eval>required,email,trim</eval>
+                            </config>
+                        </TCEforms>
+                    </settings.emailFrom>
+
+                    <settings.emailFromName>
+                        <TCEforms>
+                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailFromName</label>
+                            <displayCond>FIELD:settings.emailNotification:REQ:true</displayCond>
+                            <config>
+                                <type>input</type>
+                                <size>20</size>
+                                <eval>trim</eval>
+                            </config>
+                        </TCEforms>
+                    </settings.emailFromName>
+
+                    <settings.emailItems>
+                        <displayCond>FIELD:settings.emailNotification:REQ:true</displayCond>
+                        <section>1</section>
+                        <type>array</type>
+                        <title>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailReceivers</title>
+                        <el>
+                            <container>
+                                <type>array</type>
+                                <title>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailReceivers.add</title>
+                                <el>
+                                    <template>
+                                        <TCEforms>
+                                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.template</label>
+                                            <config>
+                                                <type>select</type>
+                                                <renderType>selectSingle</renderType>
+                                                <items>
+                                                    <numIndex index="0">
+                                                        <numIndex index="0">LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.template.create</numIndex>
+                                                        <numIndex index="1">createAction</numIndex>
+                                                    </numIndex>
+                                                    <numIndex index="1">
+                                                        <numIndex index="0">LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.template.update</numIndex>
+                                                        <numIndex index="1">updateAction</numIndex>
+                                                    </numIndex>
+                                                    <numIndex index="2">
+                                                        <numIndex index="0">LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.template.delete</numIndex>
+                                                        <numIndex index="1">deleteAction</numIndex>
+                                                    </numIndex>
+                                                </items>
+                                            </config>
+                                        </TCEforms>
+                                    </template>
+                                    <email>
+                                        <TCEforms>
+                                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.email</label>
+                                            <config>
+                                                <type>input</type>
+                                                <size>48</size>
+                                                <eval>required,email,trim</eval>
+                                            </config>
+                                        </TCEforms>
+                                    </email>
+                                    <name>
+                                        <TCEforms>
+                                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.name</label>
+                                            <config>
+                                                <type>input</type>
+                                                <size>48</size>
+                                                <eval>trim</eval>
+                                            </config>
+                                        </TCEforms>
+                                    </name>
+                                    <subject>
+                                        <TCEforms>
+                                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.subject</label>
+                                            <config>
+                                                <type>input</type>
+                                                <size>48</size>
+                                                <eval>required,trim</eval>
+                                            </config>
+                                        </TCEforms>
+                                    </subject>
+                                    <body>
+                                        <TCEforms>
+                                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.body</label>
+                                            <config>
+                                                <type>text</type>
+                                                <rows>6</rows>
+                                                <enableRichtext>true</enableRichtext>
+                                                <eval>trim</eval>
+                                            </config>
+                                        </TCEforms>
+                                    </body>
+                                </el>
+                            </container>
+                        </el>
+                    </settings.emailItems>
+
+                </el>
+            </ROOT>
+        </email>
+
         <!-- Sheet: Template -->
         <template>
             <ROOT>
