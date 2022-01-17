@@ -1,183 +1,238 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2021-11-24T12:07:45Z" product-name="md_eventmgt_frontend">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2021-11-24T12:07:45Z" product-name="md_eventmgt_frontend">
 		<header/>
 		<body>
 			<trans-unit id="tx_mdeventmgtfrontend_domain_model_event" resname="tx_mdeventmgtfrontend_domain_model_event">
 				<source>Event</source>
+				<target>Veranstaltung</target>
 			</trans-unit>
 			<trans-unit id="tx_mdeventmgtfrontend_domain_model_event.md_eventmgt_feuser" resname="tx_mdeventmgtfrontend_domain_model_event.md_eventmgt_feuser">
 				<source>Md Eventmgt Feuser</source>
+				<target>Md Eventmgt Feuser</target>
 			</trans-unit>
 
 			<trans-unit id="tca.tab" resname="tca.tab">
 				<source>User</source>
+				<target>Benutzer</target>
 			</trans-unit>
 			<trans-unit id="tca.md_eventmgt_feuser" resname="tca.md_eventmgt_feuser">
 				<source>Frontend user</source>
+				<target>Frontend-Benutzer</target>
 			</trans-unit>
 
 			<trans-unit id="flexform.frontend.title" resname="flexform.frontend.title">
 				<source>Settings</source>
+				<target>Einstellungen</target>
 			</trans-unit>
 			<trans-unit id="flexform.frontend.dateFormat" resname="flexform.frontend.dateFormat">
 				<source>Event type</source>
+				<target>Veranstaltungstyp</target>
 			</trans-unit>
 			<trans-unit id="flexform.frontend.allDay" resname="flexform.frontend.allDay">
 				<source>All day events</source>
+				<target>Ganztägig</target>
 			</trans-unit>
 			<trans-unit id="flexform.frontend.time" resname="flexform.frontend.time">
 				<source>Start- and end date and time</source>
+				<target>Start- und Enddatum und Zeit</target>
 			</trans-unit>
 			<trans-unit id="flexform.frontend.parentCategory" resname="flexform.frontend.parentCategory">
 				<source>Parent category</source>
+				<target>Übergeordnete Kategorie</target>
 			</trans-unit>
 			<trans-unit id="flexform.frontend.locationStoragePid" resname="flexform.frontend.locationStoragePid">
 				<source>Location storage page</source>
+				<target>Speicherort für Ort</target>
 			</trans-unit>
 			<trans-unit id="flexform.frontend.organisatorStoragePid" resname="flexform.frontend.organisatorStoragePid">
 				<source>Organisator storage page</source>
+				<target>Speicherort für Organisator/Ansprechpartner</target>
 			</trans-unit>
 			<trans-unit id="flexform.frontend.speakerStoragePid" resname="flexform.frontend.speakerStoragePid">
 				<source>Speaker storage page</source>
+				<target>Speicherort Redner</target>
 			</trans-unit>
 			<trans-unit id="flexform.frontend.relatedStoragePid" resname="flexform.frontend.relatedStoragePid">
 				<source>Related events storage page</source>
+				<target>Speicherort für verwandte Veranstaltungen</target>
 			</trans-unit>
 
 			<trans-unit id="flexform.tab.template" resname="flexform.tab.template">
 				<source>Template</source>
+				<target>Template</target>
 			</trans-unit>
 			<trans-unit id="flexform.templateLayout" resname="flexform.templateLayout">
 				<source>Template layout</source>
+				<target>Template layout</target>
 			</trans-unit>
 
 			<trans-unit id="flexform.tab.email" resname="flexform.tab.email">
 				<source>Email</source>
+				<target>Email</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailNotification" resname="flexform.emailNotification">
 				<source>Enable email notification</source>
+				<target>Emailbenachrichtigung aktivieren</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailNotification.enable" resname="flexform.emailNotification.enable">
 				<source>Enable</source>
+				<target>aktivieren</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailFrom" resname="flexform.emailFrom">
 				<source>Email address of sender</source>
+				<target>Emailadresse des Absenders</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailFromName" resname="flexform.emailFromName">
 				<source>Name of sender</source>
+				<target>Name des Absenders</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailReceivers" resname="flexform.emailReceivers">
 				<source>Receivers</source>
+				<target>Empfänger</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailReceivers.add" resname="flexform.emailReceivers.add">
 				<source>Add email receiver</source>
+				<target>Empfänger hinzufügen</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailTo.email" resname="flexform.emailTo.email">
 				<source>Email address of receiver</source>
+				<target>Emailadresse des Empfängers</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailTo.name" resname="flexform.emailTo.name">
 				<source>Name of receiver</source>
+				<target>Name des Empfängers</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailTo.subject" resname="flexform.emailTo.subject">
 				<source>Subject of email</source>
+				<target>Betreff der Email</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailTo.body" resname="flexform.emailTo.body">
 				<source>Text in email</source>
+				<target>Text der Email</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailTo.template" resname="flexform.emailTo.template">
 				<source>Email for action</source>
+				<target>Email für</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailTo.template.create" resname="flexform.emailTo.template.create">
 				<source>New event created</source>
+				<target>Neue Veranstaltung angelegt</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailTo.template.update" resname="flexform.emailTo.template.update">
 				<source>Event was update</source>
+				<target>Veranstaltung aktualisiert</target>
 			</trans-unit>
 			<trans-unit id="flexform.emailTo.template.delete" resname="flexform.emailTo.template.delete">
 				<source>Event was deleted</source>
+				<target>Veranstaltung gelöscht</target>
 			</trans-unit>
 
 			<trans-unit id="legend.general" resname="legend.general">
 				<source>General:</source>
+				<target>Allgemein:</target>
 			</trans-unit>
 
 			<trans-unit id="new_event" resname="new_event">
 				<source>New event</source>
+				<target>Neue Veranstaltung</target>
 			</trans-unit>
 			<trans-unit id="list_event" resname="list_event">
 				<source>List events</source>
+				<target>Liste der Veranstaltungen</target>
 			</trans-unit>
 			<trans-unit id="edit_event" resname="edit_event">
 				<source>Edit Event</source>
+				<target>Veranstaltung bearbeiten</target>
 			</trans-unit>
 			<trans-unit id="access_denied" resname="access_denied">
 				<source>Access denied</source>
+				<target>Zugriff verweigert</target>
 			</trans-unit>
 
 			<trans-unit id="save" resname="save">
 				<source>Save</source>
+				<target>Speichern</target>
 			</trans-unit>
 			<trans-unit id="or" resname="or">
 				<source>or</source>
+				<target>oder</target>
 			</trans-unit>
 			<trans-unit id="back_to_list" resname="back_to_list">
 				<source>Back to list</source>
+				<target>Zurück zur Liste</target>
 			</trans-unit>
 			<trans-unit id="new" resname="new">
 				<source>Create new</source>
+				<target>Neu</target>
 			</trans-unit>
 			<trans-unit id="edit" resname="edit">
 				<source>Edit</source>
+				<target>Bearbeiten</target>
 			</trans-unit>
 			<trans-unit id="delete" resname="delete">
 				<source>Delete</source>
+				<target>Löschen</target>
 			</trans-unit>
 			<trans-unit id="please_login" resname="please_login">
 				<source>Please login as a frontend user in order to use this functionality.</source>
+				<target>Bitte loggen Sie sich als Frontend user ein, um diese Funktionalität zu nutzen.</target>
 			</trans-unit>
 
 			<trans-unit id="modal.title" resname="modal.title">
 				<source>Delete entry</source>
+				<target>Eintrag löschen</target>
 			</trans-unit>
 			<trans-unit id="modal.close" resname="modal.close">
 				<source>Close</source>
+				<target>Schließen</target>
 			</trans-unit>
 			<trans-unit id="modal.delete" resname="modal.delete">
 				<source>Delete</source>
+				<target>Löschen</target>
 			</trans-unit>
 			<trans-unit id="modal.text" resname="modal.text">
 				<source>Do you really want to delete this event?</source>
+				<target>Wollen Sie wirkliche diese Veranstaltung löschen?</target>
 			</trans-unit>
 
 			<trans-unit id="no_items" resname="no_items">
 				<source>No items found.</source>
+				<target>Keine Einträge gefunden.</target>
 			</trans-unit>
 
 			<trans-unit id="pagination.overall" resname="pagination.overall">
 				<source>Page %s of %s</source>
+				<target>Seite %s von %s</target>
 			</trans-unit>
 			<trans-unit id="pagination.first" resname="pagination.first">
 				<source>First</source>
+				<target>Anfang</target>
 			</trans-unit>
 			<trans-unit id="pagination.last" resname="">
 				<source>Last</source>
+				<target>Ende</target>
 			</trans-unit>
 			<trans-unit id="pagination.previous" resname="pagination.previous">
 				<source>Previous</source>
+				<target>Vorherige</target>
 			</trans-unit>
 			<trans-unit id="pagination.next" resname="pagination.next">
 				<source>Next</source>
+				<target>Nächste</target>
 			</trans-unit>
 
 			<trans-unit id="controller.created" resname="controller.created">
 				<source>The event was successfully created.</source>
+				<target>Die Veranstaltung wurde erfolgreich erstellt.</target>
 			</trans-unit>
 			<trans-unit id="controller.updated" resname="controller.updated">
 				<source>The event was successfully updated.</source>
+				<target>Die Veranstaltung wurde erfolgreich aktualisiert.</target>
 			</trans-unit>
 			<trans-unit id="controller.deleted" resname="controller.deleted">
 				<source>The event was successfully deleted.</source>
+				<target>Die Veranstaltung wurde erfolgreich gelöscht.</target>
 			</trans-unit>
 		</body>
 	</file>
