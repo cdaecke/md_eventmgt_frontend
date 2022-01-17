@@ -297,6 +297,10 @@ abstract class AbstractController extends ActionController
     {
         if ($this->settings['selectedDateFormat'] == 'allDay') {
             $event->getStartdate()->setTime(0, 0, 0, 0);
+
+            if ($event->getEnddate()) {
+                $event->getEnddate()->setTime(0, 0, 0, 0);
+            }
         }
     }
 }

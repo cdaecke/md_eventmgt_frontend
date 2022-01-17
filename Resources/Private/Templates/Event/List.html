@@ -37,20 +37,18 @@
     <f:link.action action="new" class="btn btn-primary"><f:translate key="new" /></f:link.action>
 
     <!-- Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel"><f:translate key="modal.title" /></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="<f:translate key="modal.close" />"></button>
                 </div>
                 <div class="modal-body">
                     <f:translate key="modal.text" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><f:translate key="modal.close" /></button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bs-dismiss="modal"><f:translate key="modal.close" /></button>
                     <a href="#" class="btn btn-danger" id="delLink"><f:translate key="modal.delete" /></a>
                 </div>
             </div>

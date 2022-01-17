@@ -11,7 +11,7 @@
 
                     <settings.selectedDateFormat>
                         <TCEforms>
-                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.frontend.allDay</label>
+                            <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.frontend.dateFormat</label>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
