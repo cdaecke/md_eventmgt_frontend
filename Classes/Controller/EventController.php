@@ -97,6 +97,14 @@ class EventController extends AbstractController
     }
 
     /**
+     * Initialize action create
+     */
+    public function initializeCreateAction(): void
+    {
+        $this->convertFloat();
+    }
+
+    /**
      * action create
      *
      * @param Event $event
@@ -150,6 +158,14 @@ class EventController extends AbstractController
     {
         $this->assignAdditionalData();
         $this->view->assign('event', $event);
+    }
+
+    /**
+     * Initialize action update
+     */
+    public function initializeUpdateAction(): void
+    {
+        $this->convertFloat();
     }
 
     /**

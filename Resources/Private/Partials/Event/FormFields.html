@@ -68,6 +68,7 @@
                 </label>
                 <f:form.textfield
                     property="price"
+                    value="{f:if(condition:'{event.price}',then:'{event.price -> f:format.number(decimalSeparator: settings.floatpoint)}')}"
                     id="price"
                     class="form-control" />
             </div>

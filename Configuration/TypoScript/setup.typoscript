@@ -36,6 +36,11 @@ plugin.tx_mdeventmgtfrontend_frontend {
       }
     }
 
+    // Use , or . for floats
+    // If set to `,`, you can use 12,34 as float value
+    // If set to `.`, you can use 12.34 as float value
+    floatpoint = ,
+
     paginate {
       itemsPerPage = 10
       insertAbove = 0

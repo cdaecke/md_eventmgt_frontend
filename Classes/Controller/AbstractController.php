@@ -19,6 +19,7 @@ use GeorgRinger\NumberedPagination\NumberedPagination;
 use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\EventRepository;
 use Mediadreams\MdEventmgtFrontend\Service\EmailService;
+use Mediadreams\MdEventmgtFrontend\TypeConverter\FloatConverter;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -40,6 +41,13 @@ abstract class AbstractController extends ActionController
      * @var EmailService
      */
     public $emailService;
+
+    /**
+     * floatConverter
+     *
+     * @var FloatConverter
+     */
+    protected $floatConverter = null;
 
     /**
      * Frontend user data
@@ -129,6 +137,14 @@ abstract class AbstractController extends ActionController
     public function injectEmailService(EmailService $emailService)
     {
         $this->emailService = $emailService;
+    }
+
+    /**
+     * @param FloatConverter $floatConverter
+     */
+    public function injectFloatConverter(FloatConverter $floatConverter)
+    {
+        $this->floatConverter = $floatConverter;
     }
 
     /**
@@ -301,6 +317,23 @@ abstract class AbstractController extends ActionController
             if ($event->getEnddate()) {
                 $event->getEnddate()->setTime(0, 0, 0, 0);
             }
+        }
+    }
+
+    /**
+     * Convert german comma-notation to english point-notation
+     */
+    protected function convertFloat(): void
+    {
+        if (
+            $this->settings['floatpoint'] == ','
+            && isset($this->arguments['event'])
+            && isset($this->request->getArguments()['event']['price'])
+        ) {
+            $this->arguments['event']
+                ->getPropertyMappingConfiguration()
+                ->forProperty('price')
+                ->setTypeConverter($this->floatConverter);
         }
     }
 }
