@@ -12,6 +12,7 @@ namespace Mediadreams\MdEventmgtFrontend\Controller;
  * (c) 2021 Christoph Daecke <typo3@mediadreams.org>
  */
 
+use DERHANSEN\SfEventMgt\Service\EventCacheService;
 use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
 use Mediadreams\MdEventmgtFrontend\Event\CreateActionAfterPersistEvent;
 use Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent;
@@ -32,6 +33,13 @@ class EventController extends AbstractController
     /**
      * slugService
      *
+     * @var EventCacheService
+     */
+    protected $eventCacheService = null;
+
+    /**
+     * slugService
+     *
      * @var SlugService
      */
     protected $slugService = null;
@@ -42,6 +50,14 @@ class EventController extends AbstractController
      * @var PersistenceManager
      */
     protected $persistenceManager = null;
+
+    /**
+     * @param EventCacheService $eventCacheService
+     */
+    public function injectEventCacheService(EventCacheService $eventCacheService)
+    {
+        $this->eventCacheService = $eventCacheService;
+    }
 
     /**
      * @param SlugService $slugService
@@ -188,6 +204,8 @@ class EventController extends AbstractController
 
         // Send notification emails
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
+
+        $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
 
         $this->addFlashMessage(
             LocalizationUtility::translate('controller.updated', 'md_eventmgt_frontend'),
