@@ -104,8 +104,6 @@ class EventController extends AbstractController
      */
     public function newAction(): void
     {
-        $this->assignAdditionalData();
-
         // Allow to pass data via link to form
         // Example: <f:link.action action="new" controller="Event" arguments="{title:'myTitle'}">New myTitle</f:link.action>
         $arguments = $this->request->getArguments();
@@ -135,7 +133,7 @@ class EventController extends AbstractController
         $this->setTime($event);
 
         // PSR-14 Event
-        $this->eventDispatcher->dispatch(new CreateActionBeforeSaveEvent($event, $this));
+        $this->eventDispatcher->dispatch(new CreateActionBeforeSaveEvent($event, $this, $this->settings));
 
         $this->eventRepository->add($event);
 
@@ -147,7 +145,7 @@ class EventController extends AbstractController
         $event->setSlug($slug);
 
         // PSR-14 Event
-        $this->eventDispatcher->dispatch(new CreateActionAfterPersistEvent($event, $this));
+        $this->eventDispatcher->dispatch(new CreateActionAfterPersistEvent($event, $this, $this->settings));
 
         $this->eventRepository->update($event);
 
@@ -172,7 +170,6 @@ class EventController extends AbstractController
      */
     public function editAction(Event $event): void
     {
-        $this->assignAdditionalData();
         $this->view->assign('event', $event);
     }
 
@@ -198,7 +195,7 @@ class EventController extends AbstractController
         $this->setTime($event);
 
         // PSR-14 Event
-        $this->eventDispatcher->dispatch(new UpdateActionBeforeSaveEvent($event, $this));
+        $this->eventDispatcher->dispatch(new UpdateActionBeforeSaveEvent($event, $this, $this->settings));
 
         $this->eventRepository->update($event);
 
@@ -227,7 +224,7 @@ class EventController extends AbstractController
     public function deleteAction(Event $event): void
     {
         // PSR-14 Event
-        $this->eventDispatcher->dispatch(new DeleteActionBeforeDeleteEvent($event, $this));
+        $this->eventDispatcher->dispatch(new DeleteActionBeforeDeleteEvent($event, $this, $this->settings));
 
         // Send notification emails
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);

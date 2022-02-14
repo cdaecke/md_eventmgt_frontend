@@ -32,15 +32,22 @@ abstract class BaseEvent
     private $eventController;
 
     /**
+     * @var array
+     */
+    private $settings;
+
+    /**
      * BaseEvent constructor.
      *
      * @param Event $event
      * @param EventController $eventController
+     * @param array $settings
      */
-    public function __construct(Event $event, EventController $eventController)
+    public function __construct(Event $event, EventController $eventController, array $settings)
     {
         $this->event = $event;
         $this->eventController = $eventController;
+        $this->settings = $settings;
     }
 
     /**
@@ -65,5 +72,21 @@ abstract class BaseEvent
     public function getEventController(): EventController
     {
         return $this->eventController;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSettings(): array
+    {
+        return $this->settings;
+    }
+
+    /**
+     * @param array $settings
+     */
+    public function setSettings(array $settings): void
+    {
+        $this->settings = $settings;
     }
 }

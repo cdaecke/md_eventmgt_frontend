@@ -20,9 +20,11 @@ use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\EventRepository;
 use Mediadreams\MdEventmgtFrontend\Service\EmailService;
 use Mediadreams\MdEventmgtFrontend\TypeConverter\FloatConverter;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -35,13 +37,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 abstract class AbstractController extends ActionController
 {
-    /**
-     * emailService
-     *
-     * @var EmailService
-     */
-    public $emailService;
-
     /**
      * floatConverter
      *
@@ -132,14 +127,6 @@ abstract class AbstractController extends ActionController
     }
 
     /**
-     * @param EmailService $slugService
-     */
-    public function injectEmailService(EmailService $emailService)
-    {
-        $this->emailService = $emailService;
-    }
-
-    /**
      * @param FloatConverter $floatConverter
      */
     public function injectFloatConverter(FloatConverter $floatConverter)
@@ -203,6 +190,55 @@ abstract class AbstractController extends ActionController
     }
 
     /**
+     * Add some additional data to view
+     *
+     * @param ViewInterface $view
+     */
+    protected function initializeView(ViewInterface $view)
+    {
+        $view->assignMultiple([
+            'feUser' => $this->feUser,
+            'contentObjectData' => $this->configurationManager->getContentObject()->data
+        ]);
+
+        if (is_object($GLOBALS['TSFE'])) {
+            $view->assign('pageData', $GLOBALS['TSFE']->page);
+        }
+
+        if (isset($this->settings['parentCategory']) && $this->settings['parentCategory'] > 0) {
+            $this->categoryRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
+            $categories = $this->categoryRepository->findByParent($this->settings['parentCategory']);
+            $this->view->assign('categories', $categories);
+        }
+
+        if (isset($this->settings['locationStoragePid']) && $this->settings['locationStoragePid'] > 0) {
+            $this->locationRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
+            $locations = $this->locationRepository->findByPid($this->settings['locationStoragePid']);
+            $this->view->assign('locations', $locations);
+        }
+
+        if (isset($this->settings['organisatorStoragePid']) && $this->settings['organisatorStoragePid'] > 0) {
+            $this->organisatorRepository->setDefaultOrderings(['name' => QueryInterface::ORDER_ASCENDING]);
+            $organisators = $this->organisatorRepository->findByPid($this->settings['organisatorStoragePid']);
+            $this->view->assign('organisators', $organisators);
+        }
+
+        if (isset($this->settings['speakerStoragePid']) && $this->settings['speakerStoragePid'] > 0) {
+            $this->speakerRepository->setDefaultOrderings(['name' => QueryInterface::ORDER_ASCENDING]);
+            $speakers = $this->speakerRepository->findByPid($this->settings['speakerStoragePid']);
+            $this->view->assign('speakers', $speakers);
+        }
+
+        if (isset($this->settings['relatedStoragePid']) && $this->settings['relatedStoragePid'] > 0) {
+            $this->eventRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
+            $relatedEvents = $this->eventRepository->findByPid($this->settings['relatedStoragePid']);
+            $this->view->assign('relatedEvents', $relatedEvents);
+        }
+
+        parent::initializeView($view);
+    }
+
+    /**
      * Send emails
      * This will loop through all configured emails settings and send emails accordingly
      *
@@ -211,6 +247,7 @@ abstract class AbstractController extends ActionController
      */
     public function sendEmails(array $data)
     {
+        $emailService = GeneralUtility::makeInstance(EmailService::class);
         $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
         );
@@ -225,7 +262,7 @@ abstract class AbstractController extends ActionController
                     ];
                     $dataArr = array_merge($dataArr, $data);
 
-                    $this->emailService->sendEmail(
+                    $emailService->sendEmail(
                         ['email' => $this->settings['emailFrom'], 'name' => $this->settings['emailFromName']],
                         ['email' => $emails['container']['email'], 'name' => $emails['container']['name']],
                         $emails['container']['subject'],
@@ -237,44 +274,6 @@ abstract class AbstractController extends ActionController
                     );
                 }
             }
-        }
-    }
-
-    /**
-     * Assign additional data to template
-     */
-    protected function assignAdditionalData(): void
-    {
-        $this->view->assign('feUser', $this->feUser);
-
-        if (isset($this->settings['parentCategory']) && strlen($this->settings['parentCategory']) > 0) {
-            $this->categoryRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
-            $categories = $this->categoryRepository->findByParent($this->settings['parentCategory']);
-            $this->view->assign('categories', $categories);
-        }
-
-        if (isset($this->settings['locationStoragePid']) && strlen($this->settings['locationStoragePid']) > 0) {
-            $this->locationRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
-            $locations = $this->locationRepository->findByPid($this->settings['locationStoragePid']);
-            $this->view->assign('locations', $locations);
-        }
-
-        if (isset($this->settings['organisatorStoragePid']) && strlen($this->settings['organisatorStoragePid']) > 0) {
-            $this->organisatorRepository->setDefaultOrderings(['name' => QueryInterface::ORDER_ASCENDING]);
-            $organisators = $this->organisatorRepository->findByPid($this->settings['organisatorStoragePid']);
-            $this->view->assign('organisators', $organisators);
-        }
-
-        if (isset($this->settings['speakerStoragePid']) && strlen($this->settings['speakerStoragePid']) > 0) {
-            $this->speakerRepository->setDefaultOrderings(['name' => QueryInterface::ORDER_ASCENDING]);
-            $speakers = $this->speakerRepository->findByPid($this->settings['speakerStoragePid']);
-            $this->view->assign('speakers', $speakers);
-        }
-
-        if (isset($this->settings['relatedStoragePid']) && strlen($this->settings['relatedStoragePid']) > 0) {
-            $this->eventRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
-            $relatedEvents = $this->eventRepository->findByPid($this->settings['relatedStoragePid']);
-            $this->view->assign('relatedEvents', $relatedEvents);
         }
     }
 
