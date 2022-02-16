@@ -234,6 +234,10 @@
 				<source>The event was successfully deleted.</source>
 				<target>Die Veranstaltung wurde erfolgreich gelöscht.</target>
 			</trans-unit>
+			<trans-unit id="controller.access_error" resname="controller.access_error">
+				<source>You are not allowed to edit this record.</source>
+				<target>Sie sind nicht berechtigt diesen Beitrag zu bearbeiten.</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

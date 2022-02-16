@@ -179,6 +179,9 @@
 			<trans-unit id="controller.deleted" resname="controller.deleted">
 				<source>The event was successfully deleted.</source>
 			</trans-unit>
+			<trans-unit id="controller.access_error" resname="controller.access_error">
+				<source>You are not allowed to edit this record.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

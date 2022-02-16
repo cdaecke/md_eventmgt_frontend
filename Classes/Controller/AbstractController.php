@@ -20,6 +20,7 @@ use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\EventRepository;
 use Mediadreams\MdEventmgtFrontend\Service\EmailService;
 use Mediadreams\MdEventmgtFrontend\TypeConverter\FloatConverter;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository;
@@ -236,6 +237,26 @@ abstract class AbstractController extends ActionController
         }
 
         parent::initializeView($view);
+    }
+
+    /**
+     * Check, if event belongs to user
+     * If event does not belong to user, redirect to list action
+     *
+     * @param Event $event
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     */
+    protected function checkAccess(Event $event)
+    {
+        if ($event->getMdEventmgtFeuser()->getUid() !== $this->feUser['uid']) {
+            $this->addFlashMessage(
+                LocalizationUtility::translate('controller.access_error', 'md_eventmgt_frontend'),
+                '',
+                AbstractMessage::ERROR
+            );
+
+            $this->redirect('list');
+        }
     }
 
     /**

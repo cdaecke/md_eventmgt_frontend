@@ -170,6 +170,8 @@ class EventController extends AbstractController
      */
     public function editAction(Event $event): void
     {
+        $this->checkAccess($event);
+
         $this->view->assign('event', $event);
     }
 
@@ -192,6 +194,8 @@ class EventController extends AbstractController
      */
     public function updateAction(Event $event): void
     {
+        $this->checkAccess($event);
+
         $this->setTime($event);
 
         // PSR-14 Event
@@ -223,6 +227,8 @@ class EventController extends AbstractController
      */
     public function deleteAction(Event $event): void
     {
+        $this->checkAccess($event);
+
         // PSR-14 Event
         $this->eventDispatcher->dispatch(new DeleteActionBeforeDeleteEvent($event, $this, $this->settings));
 
