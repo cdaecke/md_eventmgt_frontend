@@ -25,7 +25,7 @@
 	},
     "require": {
         "typo3/cms-core": "^10.4 || ^11.5",
-		"derhansen/sf_event_mgt": "^5 || 6",
+		"derhansen/sf_event_mgt": "^5 || ^6",
 		"georgringer/numbered-pagination": ">=1.0.2,<2.0"
     },
     "autoload": {
