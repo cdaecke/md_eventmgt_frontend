@@ -31,7 +31,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class EventController extends AbstractController
 {
     /**
-     * slugService
+     * eventCacheService
      *
      * @var EventCacheService
      */
@@ -152,6 +152,8 @@ class EventController extends AbstractController
         // Send notification emails
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
 
+        $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
+
         $this->addFlashMessage(
             LocalizationUtility::translate('controller.created', 'md_eventmgt_frontend'),
             '',
@@ -242,6 +244,9 @@ class EventController extends AbstractController
         );
 
         $this->eventRepository->remove($event);
+
+        $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
+
         $this->redirect('list');
     }
 
