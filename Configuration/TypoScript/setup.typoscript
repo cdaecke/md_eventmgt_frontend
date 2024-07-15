@@ -46,7 +46,6 @@ plugin.tx_mdeventmgtfrontend_frontend {
       insertAbove = 0
       insertBelow = 1
       maximumNumberOfLinks = 6
-      addQueryStringMethod = GET
     }
   }
 }
