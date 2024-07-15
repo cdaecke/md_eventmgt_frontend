@@ -8,7 +8,7 @@
 
     <f:render partial="FormErrors" />
 
-    <f:form action="create" name="event" object="{event}" additionalAttributes="{data-parsley-validate:''}">
+    <f:form action="create" name="event" additionalAttributes="{data-parsley-validate:''}">
         <f:render partial="Event/FormFields" arguments="{_all}" />
 
         <f:form.submit value="{f:translate(key: 'save')}" class="btn btn-primary" />

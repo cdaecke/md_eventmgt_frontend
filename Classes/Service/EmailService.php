@@ -30,12 +30,9 @@ class EmailService
      */
     protected $standaloneView = null;
 
-    /**
-     * @param StandaloneView $standaloneView
-     */
-    public function injectStandaloneView(StandaloneView $standaloneView)
+    public function __construct()
     {
-        $this->standaloneView = $standaloneView;
+        $this->standaloneView = GeneralUtility::makeInstance(StandaloneView::class);;
     }
 
     /**
@@ -47,7 +44,6 @@ class EmailService
      * @param string $template The template file
      * @param array $data Variables/data to be passed to template
      * @param array $settings Settings of extension
-     * @param object $controllerContext ControllerContext
      * @param array $extbaseFrameworkConfiguration Extbase framework configuration
      * @return bool
      */
@@ -58,7 +54,6 @@ class EmailService
         string $template,
         array $data,
         array $settings,
-        $controllerContext,
         array $extbaseFrameworkConfiguration
     ) {
         $from = $fromArr['email'];
@@ -69,7 +64,7 @@ class EmailService
         }
 
         // Initialize view for email template
-        $this->initializeView($controllerContext, $extbaseFrameworkConfiguration, $template);
+        $this->initializeView($extbaseFrameworkConfiguration, $template);
         $this->standaloneView->assign('settings', $settings);
         $this->standaloneView->assignMultiple($data);
 
@@ -96,15 +91,11 @@ class EmailService
     /**
      * Initialize view for email templates
      *
-     * @param object $controllerContext ControllerContext
      * @param array $extbaseFrameworkConfiguration Extbase framework configuration
      * @param string $templateName The template name
      */
-    protected function initializeView($controllerContext, $extbaseFrameworkConfiguration, string $templateName): void
+    protected function initializeView($extbaseFrameworkConfiguration, string $templateName): void
     {
-        // Needed for translations in fluid template
-        $this->standaloneView->setControllerContext($controllerContext);
-
         // Templates path
         $templateRootPath = GeneralUtility::getFileAbsFileName(end($extbaseFrameworkConfiguration['view']['templateRootPaths']));
         $templatePathAndFilename = $templateRootPath . 'Email/' . ucfirst($templateName) . '.html';

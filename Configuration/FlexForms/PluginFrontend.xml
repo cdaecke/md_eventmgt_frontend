@@ -136,6 +136,7 @@
                                 <type>input</type>
                                 <size>20</size>
                                 <eval>required,email,trim</eval>
+                                <required>true</required>
                             </config>
                         </TCEforms>
                     </settings.emailFrom>
@@ -192,6 +193,7 @@
                                                 <type>input</type>
                                                 <size>48</size>
                                                 <eval>required,email,trim</eval>
+                                                <required>true</required>
                                             </config>
                                         </TCEforms>
                                     </email>
@@ -212,6 +214,7 @@
                                                 <type>input</type>
                                                 <size>48</size>
                                                 <eval>required,trim</eval>
+                                                <required>true</required>
                                             </config>
                                         </TCEforms>
                                     </subject>

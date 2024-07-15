@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mediadreams\MdEventmgtFrontend\Controller;
@@ -19,7 +20,8 @@ use Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent;
 use Mediadreams\MdEventmgtFrontend\Event\DeleteActionBeforeDeleteEvent;
 use Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSaveEvent;
 use Mediadreams\MdEventmgtFrontend\Service\SlugService;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -80,34 +82,38 @@ class EventController extends AbstractController
      *
      * This will be called, if user is not logged in
      */
-    public function accessAction(): void
+    public function accessAction(): ResponseInterface
     {
-
+        return $this->htmlResponse();
     }
 
     /**
      * action list
      *
-     * @return void
+     * @return ResponseInterface
      */
-    public function listAction(): void
+    public function listAction(): ResponseInterface
     {
         $this->eventRepository->setDefaultOrderings(['startdate' => QueryInterface::ORDER_DESCENDING]);
         $events = $this->eventRepository->findByMdEventmgtFeuser($this->feUser['uid']);
         $this->assignPagination($events);
+
+        return $this->htmlResponse();
     }
 
     /**
      * action new
      *
-     * @return void
+     * @return ResponseInterface
      */
-    public function newAction(): void
+    public function newAction(): ResponseInterface
     {
         // Allow to pass data via link to form
         // Example: <f:link.action action="new" controller="Event" arguments="{title:'myTitle'}">New myTitle</f:link.action>
         $arguments = $this->request->getArguments();
         $this->view->assign('event', $arguments);
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -122,12 +128,9 @@ class EventController extends AbstractController
      * action create
      *
      * @param Event $event
-     * @return void
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
+     * @return ResponseInterface
      */
-    public function createAction(Event $event): void
+    public function createAction(Event $event): ResponseInterface
     {
         $event->setMdEventmgtFeuser($this->feUser['uid']);
         $this->setTime($event);
@@ -157,10 +160,10 @@ class EventController extends AbstractController
         $this->addFlashMessage(
             LocalizationUtility::translate('controller.created', 'md_eventmgt_frontend'),
             '',
-            AbstractMessage::OK
+            ContextualFeedbackSeverity::OK
         );
 
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
@@ -168,13 +171,15 @@ class EventController extends AbstractController
      *
      * @param Event $event
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("event")
-     * @return void
+     * @return ResponseInterface
      */
-    public function editAction(Event $event): void
+    public function editAction(Event $event): ResponseInterface
     {
         $this->checkAccess($event);
 
         $this->view->assign('event', $event);
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -189,12 +194,9 @@ class EventController extends AbstractController
      * action update
      *
      * @param Event $event
-     * @return void
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @return ResponseInterface
      */
-    public function updateAction(Event $event): void
+    public function updateAction(Event $event): ResponseInterface
     {
         $this->checkAccess($event);
 
@@ -213,21 +215,19 @@ class EventController extends AbstractController
         $this->addFlashMessage(
             LocalizationUtility::translate('controller.updated', 'md_eventmgt_frontend'),
             '',
-            AbstractMessage::OK
+            ContextualFeedbackSeverity::OK
         );
 
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
      * action delete
      *
      * @param Event $event
-     * @return void
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @return ResponseInterface
      */
-    public function deleteAction(Event $event): void
+    public function deleteAction(Event $event): ResponseInterface
     {
         $this->checkAccess($event);
 
@@ -240,14 +240,14 @@ class EventController extends AbstractController
         $this->addFlashMessage(
             LocalizationUtility::translate('controller.deleted', 'md_eventmgt_frontend'),
             '',
-            AbstractMessage::OK
+            ContextualFeedbackSeverity::OK
         );
 
         $this->eventRepository->remove($event);
 
         $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
 
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
 }

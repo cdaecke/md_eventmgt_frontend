@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mediadreams\MdEventmgtFrontend\Domain\Model;
@@ -20,7 +21,7 @@ class Event extends \DERHANSEN\SfEventMgt\Domain\Model\Event
     /**
      * Frontend user, who has created the event
      *
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     * @var \Mediadreams\MdEventmgtFrontend\Domain\Model\FrontendUser
      */
     protected $mdEventmgtFeuser = null;
 
@@ -34,7 +35,7 @@ class Event extends \DERHANSEN\SfEventMgt\Domain\Model\Event
     /**
      * Returns the mdEventmgtFeuser
      *
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $mdEventmgtFeuser
+     * @return \Mediadreams\MdEventmgtFrontend\Domain\Model\FrontendUser $mdEventmgtFeuser
      */
     public function getMdEventmgtFeuser()
     {

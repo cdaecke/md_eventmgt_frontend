@@ -13,10 +13,15 @@ namespace Mediadreams\MdEventmgtFrontend\Domain\Repository;
  * (c) 2021 Christoph Daecke <typo3@mediadreams.org>
  */
 
-/**
- * The repository for Events
- */
-class EventRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
-{
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
+/**
+ * The repository for Categories
+ */
+class CategoryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+{
+    protected $defaultOrderings = [
+        'sorting' => QueryInterface::ORDER_ASCENDING,
+        'uid' => QueryInterface::ORDER_ASCENDING,
+    ];
 }

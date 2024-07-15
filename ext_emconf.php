@@ -11,9 +11,9 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '1.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.0-11.5.99',
-            'sf_event_mgt' => '5.0.0-6.99.99',
-            'numbered_pagination' => '1.0.2-1.99',
+            'typo3' => '12.4.0-12.4.99',
+            'sf_event_mgt' => '7.0.0-7.99.99',
+            'numbered_pagination' => '1.0.2-2.99',
         ],
         'conflicts' => [],
         'suggests' => [],

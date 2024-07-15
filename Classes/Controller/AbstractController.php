@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mediadreams\MdEventmgtFrontend\Controller;
@@ -17,15 +18,15 @@ use DERHANSEN\SfEventMgt\Domain\Repository\OrganisatorRepository;
 use DERHANSEN\SfEventMgt\Domain\Repository\SpeakerRepository;
 use GeorgRinger\NumberedPagination\NumberedPagination;
 use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
+use Mediadreams\MdEventmgtFrontend\Domain\Repository\CategoryRepository;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\EventRepository;
 use Mediadreams\MdEventmgtFrontend\Service\EmailService;
 use Mediadreams\MdEventmgtFrontend\TypeConverter\FloatConverter;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -48,9 +49,9 @@ abstract class AbstractController extends ActionController
     /**
      * Frontend user data
      *
-     * @var array $feUser
+     * @var array FeUser array
      */
-    protected $feUser = null;
+    protected $feUser = [];
 
     /**
      * categoryRepository
@@ -148,18 +149,21 @@ abstract class AbstractController extends ActionController
     /**
      * Action initialize
      *
-     * Check, if frontend user is logged in
-     *
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * Check, if frontend user is logged in and set typeConverter for `startdate` and `enddate`
+     * @throws PropagateResponseException
      */
-    public function initializeAction(): void
+    public function initializeAction()
     {
         parent::initializeAction();
 
-        $this->feUser = $GLOBALS['TSFE']->fe_user->user;
+        $this->feUser = $GLOBALS['TSFE']->fe_user->user ?? [];
 
-        if (!$this->feUser && $this->actionMethodName != 'accessAction') {
-            $this->redirect('access');
+        if (count($this->feUser) == 0 && $this->actionMethodName != 'accessAction') {
+            $uri = $this->uriBuilder->uriFor('access');
+            $response = $this->responseFactory->createResponse()
+                ->withHeader('Location', $uri);
+
+            throw new \TYPO3\CMS\Core\Http\PropagateResponseException($response, 307);
         }
 
         if ($this->actionMethodName == 'createAction' || $this->actionMethodName == 'updateAction') {
@@ -192,18 +196,17 @@ abstract class AbstractController extends ActionController
 
     /**
      * Add some additional data to view
-     *
-     * @param ViewInterface $view
      */
-    protected function initializeView(ViewInterface $view)
+    protected function initializeView(): void
     {
-        $view->assignMultiple([
+        $this->redirect('access');
+        $this->view->assignMultiple([
             'feUser' => $this->feUser,
             'contentObjectData' => $this->configurationManager->getContentObject()->data
         ]);
 
         if (is_object($GLOBALS['TSFE'])) {
-            $view->assign('pageData', $GLOBALS['TSFE']->page);
+            $this->view->assign('pageData', $GLOBALS['TSFE']->page);
         }
 
         if (isset($this->settings['parentCategory']) && $this->settings['parentCategory'] > 0) {
@@ -235,8 +238,6 @@ abstract class AbstractController extends ActionController
             $relatedEvents = $this->eventRepository->findByPid($this->settings['relatedStoragePid']);
             $this->view->assign('relatedEvents', $relatedEvents);
         }
-
-        parent::initializeView($view);
     }
 
     /**
@@ -252,7 +253,7 @@ abstract class AbstractController extends ActionController
             $this->addFlashMessage(
                 LocalizationUtility::translate('controller.access_error', 'md_eventmgt_frontend'),
                 '',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
             $this->redirect('list');
@@ -268,6 +269,7 @@ abstract class AbstractController extends ActionController
      */
     public function sendEmails(array $data)
     {
+        /** @var EmailService $emailService */
         $emailService = GeneralUtility::makeInstance(EmailService::class);
         $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
@@ -290,7 +292,6 @@ abstract class AbstractController extends ActionController
                         $emails['container']['template'],
                         $dataArr,
                         $this->settings,
-                        $this->controllerContext,
                         $extbaseFrameworkConfiguration
                     );
                 }

@@ -1,5 +1,6 @@
 <?php
-defined('TYPO3_MODE') || die();
+
+defined('TYPO3') or die();
 
 $tmp_md_eventmgt_frontend_columns = [
 

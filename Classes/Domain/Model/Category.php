@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mediadreams\MdEventmgtFrontend\Domain\Repository;
+namespace Mediadreams\MdEventmgtFrontend\Domain\Model;
 
 /**
  * This file is part of the "Frontend for ext:sf_event_mgt" Extension for TYPO3 CMS.
@@ -14,9 +14,12 @@ namespace Mediadreams\MdEventmgtFrontend\Domain\Repository;
  */
 
 /**
- * The repository for Events
+ * Class Category
+ * This is needed, because we use our own CategoryRepository
+ *
+ * @package Mediadreams\MdEventmgtFrontend\Domain\Model
  */
-class EventRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 {
 
 }

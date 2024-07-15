@@ -94,7 +94,7 @@ final class MyListener
 
         // Get EventController
         /** @var \Mediadreams\MdEventmgtFrontend\Controller\EventController $controller */
-        $controller = $obj->getNewsController();
+        $controller = $obj->getEventController();
     }
 }
 
