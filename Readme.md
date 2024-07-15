@@ -6,8 +6,8 @@ Templates are ready to use with the [bootstrap framework](https://getbootstrap.c
 
 ## Requirements
 
-- TYPO3 >= 10.4
-- ext:sf_event_mgt >= 5.6
+- TYPO3 <= 12.4
+- ext:sf_event_mgt <= 7
 
 ## Installation
 

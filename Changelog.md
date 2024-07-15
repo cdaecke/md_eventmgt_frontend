@@ -1,3 +1,12 @@
+# Version 2.0.0 (2024-07-15)
+
+- [FEATURE] TYPO3 v12 compatibility
+- [BREAKING] Remove `addQueryStringMethod` from links. This was used in the paginator.
+
+
+All changes
+https://github.com/cdaecke/md_eventmgt_frontend/compare/1.0.0...2.0.0
+
 # Version 1.0.0 (2022-03-08)
 
 Stable release of version 1.0.0
