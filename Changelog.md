@@ -1,3 +1,11 @@
+# Version 2.0.1 (2024-08-22)
+
+- [FEATURE] Add controller request in events
+
+
+All changes
+https://github.com/cdaecke/md_eventmgt_frontend/compare/2.0.0...2.0.1
+
 # Version 2.0.0 (2024-07-15)
 
 - [FEATURE] TYPO3 v12 compatibility
