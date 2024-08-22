@@ -14,6 +14,7 @@ namespace Mediadreams\MdEventmgtFrontend\Event;
 
 use Mediadreams\MdEventmgtFrontend\Controller\EventController;
 use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
+use TYPO3\CMS\Extbase\Mvc\Request;
 
 /**
  * Class BaseEvent
@@ -37,17 +38,23 @@ abstract class BaseEvent
     private $settings;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * BaseEvent constructor.
      *
      * @param Event $event
      * @param EventController $eventController
      * @param array $settings
      */
-    public function __construct(Event $event, EventController $eventController, array $settings)
+    public function __construct(Event $event, EventController $eventController, array $settings, Request $request)
     {
         $this->event = $event;
         $this->eventController = $eventController;
         $this->settings = $settings;
+        $this->request = $request;
     }
 
     /**
@@ -88,5 +95,13 @@ abstract class BaseEvent
     public function setSettings(array $settings): void
     {
         $this->settings = $settings;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest(): Request
+    {
+        return $this->request;
     }
 }

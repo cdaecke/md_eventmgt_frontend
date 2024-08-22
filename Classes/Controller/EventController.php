@@ -136,7 +136,7 @@ class EventController extends AbstractController
         $this->setTime($event);
 
         // PSR-14 Event
-        $this->eventDispatcher->dispatch(new CreateActionBeforeSaveEvent($event, $this, $this->settings));
+        $this->eventDispatcher->dispatch(new CreateActionBeforeSaveEvent($event, $this, $this->settings, $this->request));
 
         $this->eventRepository->add($event);
 
@@ -148,7 +148,7 @@ class EventController extends AbstractController
         $event->setSlug($slug);
 
         // PSR-14 Event
-        $this->eventDispatcher->dispatch(new CreateActionAfterPersistEvent($event, $this, $this->settings));
+        $this->eventDispatcher->dispatch(new CreateActionAfterPersistEvent($event, $this, $this->settings, $this->request));
 
         $this->eventRepository->update($event);
 
@@ -203,7 +203,7 @@ class EventController extends AbstractController
         $this->setTime($event);
 
         // PSR-14 Event
-        $this->eventDispatcher->dispatch(new UpdateActionBeforeSaveEvent($event, $this, $this->settings));
+        $this->eventDispatcher->dispatch(new UpdateActionBeforeSaveEvent($event, $this, $this->settings, $this->request));
 
         $this->eventRepository->update($event);
 
@@ -232,7 +232,7 @@ class EventController extends AbstractController
         $this->checkAccess($event);
 
         // PSR-14 Event
-        $this->eventDispatcher->dispatch(new DeleteActionBeforeDeleteEvent($event, $this, $this->settings));
+        $this->eventDispatcher->dispatch(new DeleteActionBeforeDeleteEvent($event, $this, $this->settings, $this->request));
 
         // Send notification emails
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
