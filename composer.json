@@ -24,8 +24,8 @@
 		"source": "https://github.com/cdaecke/md_eventmgt_frontend"
 	},
     "require": {
-        "typo3/cms-core": "^12.4",
-		"derhansen/sf_event_mgt": "^7",
+        "typo3/cms-core": "^13.4",
+		"derhansen/sf_event_mgt": "^8.0",
 		"georgringer/numbered-pagination": ">=1.0.2,<3.0"
     },
     "autoload": {
