@@ -32,54 +32,26 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class EventController extends AbstractController
 {
-    /**
-     * eventCacheService
-     *
-     * @var EventCacheService
-     */
-    protected $eventCacheService = null;
+    protected EventCacheService $eventCacheService;
+    protected PersistenceManager $persistenceManager;
+    protected SlugService $slugService;
 
-    /**
-     * slugService
-     *
-     * @var SlugService
-     */
-    protected $slugService = null;
-
-    /**
-     * persistenceManager
-     *
-     * @var PersistenceManager
-     */
-    protected $persistenceManager = null;
-
-    /**
-     * @param EventCacheService $eventCacheService
-     */
-    public function injectEventCacheService(EventCacheService $eventCacheService)
+    public function injectEventCacheService(EventCacheService $eventCacheService): void
     {
         $this->eventCacheService = $eventCacheService;
     }
 
-    /**
-     * @param SlugService $slugService
-     */
-    public function injectSlugService(SlugService $slugService)
+    public function injectPersistenceManager(PersistenceManager $persistenceManager): void
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
+
+    public function injectSlugService(SlugService $slugService): void
     {
         $this->slugService = $slugService;
     }
 
     /**
-     * @param PersistenceManager $persistenceManager
-     */
-    public function injectPersistenceManager(PersistenceManager $persistenceManager)
-    {
-        $this->persistenceManager = $persistenceManager;
-    }
-
-    /**
-     * action access
-     *
      * This will be called, if user is not logged in
      */
     public function accessAction(): ResponseInterface
@@ -132,7 +104,7 @@ class EventController extends AbstractController
      */
     public function createAction(Event $event): ResponseInterface
     {
-        $event->setMdEventmgtFeuser($this->feUser['uid']);
+        $event->setMdEventmgtFeuserByUid($this->feUser['uid']);
         $this->setTime($event);
 
         // PSR-14 Event

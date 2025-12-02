@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mediadreams\MdEventmgtFrontend\Service;
@@ -23,20 +24,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class SlugService
 {
-    /**
-     * @var string $tableName
-     */
-    protected $tableName = 'tx_sfeventmgt_domain_model_event';
-
-    /**
-     * @var string $fieldName
-     */
-    protected $fieldName = 'slug';
-
-    /**
-     * @var SlugHelper $slugHelper
-     */
-    protected $slugHelper;
+    protected string $tableName = 'tx_sfeventmgt_domain_model_event';
+    protected string $fieldName = 'slug';
+    protected SlugHelper $slugHelper;
 
     /**
      * SlugService constructor.
