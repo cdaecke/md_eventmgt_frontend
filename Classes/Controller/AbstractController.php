@@ -141,7 +141,7 @@ abstract class AbstractController extends ActionController
      *
      * @return bool|string
      */
-    public function getErrorFlashMessage()
+    public function getErrorFlashMessage(): bool|string
     {
         return LocalizationUtility::translate('controller.error', 'md_eventmgt_frontend');
     }
@@ -152,7 +152,7 @@ abstract class AbstractController extends ActionController
      * Check, if frontend user is logged in and set typeConverter for `startdate` and `enddate`
      * @throws PropagateResponseException
      */
-    public function initializeAction()
+    public function initializeAction(): void
     {
         parent::initializeAction();
 
