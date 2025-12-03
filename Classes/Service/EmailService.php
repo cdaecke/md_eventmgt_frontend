@@ -46,6 +46,7 @@ class EmailService
      * @param array $data Variables/data to be passed to template
      * @param array $settings Settings of extension
      * @param array $extbaseFrameworkConfiguration Extbase framework configuration
+     * @param \TYPO3\CMS\Extbase\Mvc\Request $request The Extbase request
      * @return bool
      */
     public function sendEmail(
@@ -55,7 +56,8 @@ class EmailService
         string $template,
         array $data,
         array $settings,
-        array $extbaseFrameworkConfiguration
+        array $extbaseFrameworkConfiguration,
+        $request
     ) {
         $from = $fromArr['email'];
         $to = $toArr['email'];
@@ -68,6 +70,7 @@ class EmailService
         $this->initializeView($extbaseFrameworkConfiguration, $template);
         $this->standaloneView->assign('settings', $settings);
         $this->standaloneView->assignMultiple($data);
+        $this->standaloneView->setRequest($request);
 
         if (!empty($fromArr['name'])) {
             $from = new Address($fromArr['email'], $fromArr['name']);

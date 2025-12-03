@@ -236,7 +236,8 @@ abstract class AbstractController extends ActionController
                         $emails['container']['template'],
                         $dataArr,
                         $this->settings,
-                        $extbaseFrameworkConfiguration
+                        $extbaseFrameworkConfiguration,
+                        $this->request
                     );
                 }
             }
