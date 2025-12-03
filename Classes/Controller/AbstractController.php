@@ -16,13 +16,13 @@ namespace Mediadreams\MdEventmgtFrontend\Controller;
 use DERHANSEN\SfEventMgt\Domain\Repository\LocationRepository;
 use DERHANSEN\SfEventMgt\Domain\Repository\OrganisatorRepository;
 use DERHANSEN\SfEventMgt\Domain\Repository\SpeakerRepository;
-use GeorgRinger\NumberedPagination\NumberedPagination;
 use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\CategoryRepository;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\EventRepository;
 use Mediadreams\MdEventmgtFrontend\Service\EmailService;
 use Mediadreams\MdEventmgtFrontend\TypeConverter\FloatConverter;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
+use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -264,7 +264,7 @@ abstract class AbstractController extends ActionController
             $itemsPerPage
         );
 
-        $pagination = new NumberedPagination(
+        $pagination = new SlidingWindowPagination(
             $paginator,
             $maximumNumberOfLinks
         );

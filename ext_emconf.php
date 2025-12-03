@@ -13,7 +13,6 @@ $EM_CONF[$_EXTKEY] = [
         'depends' => [
             'typo3' => '13.4.0-13.4.99',
             'sf_event_mgt' => '8.0.0-8.99.99',
-            'numbered_pagination' => '1.0.2-2.99',
         ],
         'conflicts' => [],
         'suggests' => [],
