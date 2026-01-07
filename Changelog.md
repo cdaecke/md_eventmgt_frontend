@@ -1,3 +1,10 @@
+# Version 3.0.0 (2026-01-07)
+- [FEATURE] TYPO3 v13 compatibility
+- [BREAKING] Migrate `list_type` plugins to `CType` and resolve core deprecation #105076. Use upgrade wizard `EXT:md_eventmgt_frontend: Migrate plugins` after upgrading!
+
+All changes
+https://github.com/cdaecke/md_eventmgt_frontend/compare/2.0.1...3.0.0
+
 # Version 2.0.1 (2024-08-22)
 
 - [FEATURE] Add controller request in events
