@@ -13,6 +13,10 @@ namespace Mediadreams\MdEventmgtFrontend\Domain\Model;
  * (c) 2021 Christoph Daecke <typo3@mediadreams.org>
  */
 
+use Mediadreams\MdEventmgtFrontend\Domain\Model\FrontendUser;
+use Mediadreams\MdEventmgtFrontend\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Event
  */
@@ -20,56 +24,40 @@ class Event extends \DERHANSEN\SfEventMgt\Domain\Model\Event
 {
     /**
      * Frontend user, who has created the event
-     *
-     * @var \Mediadreams\MdEventmgtFrontend\Domain\Model\FrontendUser
      */
-    protected $mdEventmgtFeuser = null;
+    protected ?FrontendUser $mdEventmgtFeuser = null;
 
     /**
      * Slug of the event
-     *
-     * @var string
      */
-    protected $slug = null;
+    protected string $slug;
 
-    /**
-     * Returns the mdEventmgtFeuser
-     *
-     * @return \Mediadreams\MdEventmgtFrontend\Domain\Model\FrontendUser $mdEventmgtFeuser
-     */
-    public function getMdEventmgtFeuser()
+    public function getMdEventmgtFeuser(): ?FrontendUser
     {
         return $this->mdEventmgtFeuser;
     }
 
-    /**
-     * Sets the mdEventmgtFeuser
-     *
-     * @param int $mdEventmgtFeuser
-     * @return void
-     */
-    public function setMdEventmgtFeuser($mdEventmgtFeuser)
+    public function setMdEventmgtFeuser(?FrontendUser $mdEventmgtFeuser): void
     {
         $this->mdEventmgtFeuser = $mdEventmgtFeuser;
     }
 
-    /**
-     * Returns the slug
-     *
-     * @return string $slug
-     */
-    public function getSlug()
+    public function setMdEventmgtFeuserByUid(int $uid): void
+    {
+        $frontendUserRepository = GeneralUtility::makeInstance(FrontendUserRepository::class);
+        $feUser = $frontendUserRepository->findOneBy(['uid' => $uid]);
+
+        if ($feUser !== null) {
+            $this->mdEventmgtFeuser = $feUser;
+        }
+    }
+
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
-    /**
-     * Sets the slug
-     *
-     * @param string $slug
-     * @return void
-     */
-    public function setSlug($slug)
+    public function setSlug(string $slug): void
     {
         $this->slug = $slug;
     }

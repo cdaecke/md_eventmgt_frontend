@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mediadreams\MdEventmgtFrontend\TypeConverter;
@@ -38,7 +39,7 @@ class FloatConverter extends \TYPO3\CMS\Extbase\Property\TypeConverter\FloatConv
         $targetType,
         array $convertedChildProperties = array(),
         PropertyMappingConfigurationInterface $configuration = null
-    ) {
+    ): \TYPO3\CMS\Extbase\Error\Error|float|null {
         if ($source === null || strlen($source) === 0) {
             return null;
         }

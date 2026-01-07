@@ -16,13 +16,13 @@ namespace Mediadreams\MdEventmgtFrontend\Controller;
 use DERHANSEN\SfEventMgt\Domain\Repository\LocationRepository;
 use DERHANSEN\SfEventMgt\Domain\Repository\OrganisatorRepository;
 use DERHANSEN\SfEventMgt\Domain\Repository\SpeakerRepository;
-use GeorgRinger\NumberedPagination\NumberedPagination;
 use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\CategoryRepository;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\EventRepository;
 use Mediadreams\MdEventmgtFrontend\Service\EmailService;
 use Mediadreams\MdEventmgtFrontend\TypeConverter\FloatConverter;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
+use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -40,100 +40,47 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 abstract class AbstractController extends ActionController
 {
     /**
-     * floatConverter
-     *
-     * @var FloatConverter
-     */
-    protected $floatConverter = null;
-
-    /**
      * Frontend user data
      *
      * @var array FeUser array
      */
-    protected $feUser = [];
+    protected array $feUser = [];
 
-    /**
-     * categoryRepository
-     *
-     * @var CategoryRepository
-     */
-    protected $categoryRepository = null;
+    protected CategoryRepository $categoryRepository;
+    protected EventRepository $eventRepository;
+    protected FloatConverter $floatConverter;
+    protected LocationRepository $locationRepository;
+    protected OrganisatorRepository $organisatorRepository;
+    protected SpeakerRepository $speakerRepository;
 
-    /**
-     * eventRepository
-     *
-     * @var EventRepository
-     */
-    protected $eventRepository = null;
-
-    /**
-     * locationRepository
-     *
-     * @var LocationRepository
-     */
-    protected $locationRepository = null;
-
-    /**
-     * organisatorRepository
-     *
-     * @var OrganisatorRepository
-     */
-    protected $organisatorRepository = null;
-
-    /**
-     * speakerRepository
-     *
-     * @var SpeakerRepository
-     */
-    protected $speakerRepository = null;
-
-    /**
-     * @param CategoryRepository $categoryRepository
-     */
-    public function injectCategoryRepository(CategoryRepository $categoryRepository)
+    public function injectCategoryRepository(CategoryRepository $categoryRepository): void
     {
         $this->categoryRepository = $categoryRepository;
     }
 
-    /**
-     * @param EventRepository $eventRepository
-     */
-    public function injectEventRepository(EventRepository $eventRepository)
+    public function injectEventRepository(EventRepository $eventRepository): void
     {
         $this->eventRepository = $eventRepository;
     }
 
-    /**
-     * @param LocationRepository $locationRepository
-     */
-    public function injectLocationRepository(LocationRepository $locationRepository)
+    public function injectFloatConverter(FloatConverter $floatConverter): void
+    {
+        $this->floatConverter = $floatConverter;
+    }
+
+    public function injectLocationRepository(LocationRepository $locationRepository): void
     {
         $this->locationRepository = $locationRepository;
     }
 
-    /**
-     * @param OrganisatorRepository $organisatorRepository
-     */
-    public function injectOrganisatorRepository(OrganisatorRepository $organisatorRepository)
+    public function injectOrganisatorRepository(OrganisatorRepository $organisatorRepository): void
     {
         $this->organisatorRepository = $organisatorRepository;
     }
 
-    /**
-     * @param SpeakerRepository $speakerRepository
-     */
-    public function injectSpeakerRepository(SpeakerRepository $speakerRepository)
+    public function injectSpeakerRepository(SpeakerRepository $speakerRepository): void
     {
         $this->speakerRepository = $speakerRepository;
-    }
-
-    /**
-     * @param FloatConverter $floatConverter
-     */
-    public function injectFloatConverter(FloatConverter $floatConverter)
-    {
-        $this->floatConverter = $floatConverter;
     }
 
     /**
@@ -141,9 +88,9 @@ abstract class AbstractController extends ActionController
      *
      * @return bool|string
      */
-    public function getErrorFlashMessage()
+    public function getErrorFlashMessage(): bool|string
     {
-        return LocalizationUtility::translate('controller.error', 'md_eventmgt_frontend');
+        return false;
     }
 
     /**
@@ -152,18 +99,18 @@ abstract class AbstractController extends ActionController
      * Check, if frontend user is logged in and set typeConverter for `startdate` and `enddate`
      * @throws PropagateResponseException
      */
-    public function initializeAction()
+    public function initializeAction(): void
     {
         parent::initializeAction();
 
-        $this->feUser = $GLOBALS['TSFE']->fe_user->user ?? [];
+        $this->feUser = $this->request->getAttribute('frontend.user')->user ?? [];
 
         if (count($this->feUser) == 0 && $this->actionMethodName != 'accessAction') {
             $uri = $this->uriBuilder->uriFor('access');
             $response = $this->responseFactory->createResponse()
                 ->withHeader('Location', $uri);
 
-            throw new \TYPO3\CMS\Core\Http\PropagateResponseException($response, 307);
+            throw new PropagateResponseException($response, 307);
         }
 
         if ($this->actionMethodName == 'createAction' || $this->actionMethodName == 'updateAction') {
@@ -202,12 +149,9 @@ abstract class AbstractController extends ActionController
         $this->redirect('access');
         $this->view->assignMultiple([
             'feUser' => $this->feUser,
-            'contentObjectData' => $this->request->getAttribute('currentContentObject')->data
+            'contentObjectData' => $this->request->getAttribute('currentContentObject')->data,
+            'pageData' => $this->request->getAttribute('frontend.page.information')->getPageRecord()
         ]);
-
-        if (is_object($GLOBALS['TSFE'])) {
-            $this->view->assign('pageData', $GLOBALS['TSFE']->page);
-        }
 
         if (isset($this->settings['parentCategory']) && $this->settings['parentCategory'] > 0) {
             $this->categoryRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
@@ -292,7 +236,8 @@ abstract class AbstractController extends ActionController
                         $emails['container']['template'],
                         $dataArr,
                         $this->settings,
-                        $extbaseFrameworkConfiguration
+                        $extbaseFrameworkConfiguration,
+                        $this->request
                     );
                 }
             }
@@ -319,7 +264,7 @@ abstract class AbstractController extends ActionController
             $itemsPerPage
         );
 
-        $pagination = new NumberedPagination(
+        $pagination = new SlidingWindowPagination(
             $paginator,
             $maximumNumberOfLinks
         );
