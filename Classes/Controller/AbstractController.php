@@ -146,7 +146,6 @@ abstract class AbstractController extends ActionController
      */
     protected function initializeView(): void
     {
-        $this->redirect('access');
         $this->view->assignMultiple([
             'feUser' => $this->feUser,
             'contentObjectData' => $this->request->getAttribute('currentContentObject')->data,
@@ -189,9 +188,9 @@ abstract class AbstractController extends ActionController
      * If event does not belong to user, redirect to list action
      *
      * @param Event $event
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws PropagateResponseException
      */
-    protected function checkAccess(Event $event)
+    protected function checkAccess(Event $event): void
     {
         if ($event->getMdEventmgtFeuser()->getUid() !== $this->feUser['uid']) {
             $this->addFlashMessage(
@@ -200,7 +199,11 @@ abstract class AbstractController extends ActionController
                 ContextualFeedbackSeverity::ERROR
             );
 
-            $this->redirect('list');
+            $uri = $this->uriBuilder->uriFor('list');
+            $response = $this->responseFactory->createResponse()
+                ->withHeader('Location', $uri);
+
+            throw new PropagateResponseException($response, 307);
         }
     }
 
