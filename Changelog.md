@@ -1,3 +1,9 @@
+# Version 3.0.1 (2026-07-30)
+- [BUGFIX] check access correctly
+
+All changes
+https://github.com/cdaecke/md_eventmgt_frontend/compare/3.0.0...3.0.1
+
 # Version 3.0.0 (2026-01-07)
 - [FEATURE] TYPO3 v13 compatibility
 - [BREAKING] Migrate `list_type` plugins to `CType` and resolve core deprecation #105076. Use upgrade wizard `EXT:md_eventmgt_frontend: Migrate plugins` after upgrading!
