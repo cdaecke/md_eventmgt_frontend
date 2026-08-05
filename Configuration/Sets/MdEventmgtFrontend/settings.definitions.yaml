@@ -1,0 +1,17 @@
+categories:
+  md_eventmgt_frontend: ~
+  md_eventmgt_frontend.templates:
+    parent: md_eventmgt_frontend
+settings:
+  md_eventmgt_frontend.view.templateRootPath:
+    default: ''
+    type: string
+    category: md_eventmgt_frontend.templates
+  md_eventmgt_frontend.view.partialRootPath:
+    default: ''
+    type: string
+    category: md_eventmgt_frontend.templates
+  md_eventmgt_frontend.view.layoutRootPath:
+    default: ''
+    type: string
+    category: md_eventmgt_frontend.templates

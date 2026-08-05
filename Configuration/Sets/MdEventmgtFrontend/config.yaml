@@ -1,0 +1,4 @@
+name: mediadreams/md_eventmgt_frontend
+label: 'Frontend for ext:sf_event_mgt'
+dependencies:
+  - derhansen/sf_event_mgt
