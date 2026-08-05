@@ -36,9 +36,9 @@ class FloatConverter extends \TYPO3\CMS\Extbase\Property\TypeConverter\FloatConv
      */
     public function convertFrom(
         $source,
-        $targetType,
+        string $targetType,
         array $convertedChildProperties = array(),
-        PropertyMappingConfigurationInterface $configuration = null
+        ?PropertyMappingConfigurationInterface $configuration = null
     ): \TYPO3\CMS\Extbase\Error\Error|float|null {
         if ($source === null || strlen($source) === 0) {
             return null;

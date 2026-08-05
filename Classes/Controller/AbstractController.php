@@ -24,7 +24,6 @@ use Mediadreams\MdEventmgtFrontend\TypeConverter\FloatConverter;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
@@ -47,6 +46,7 @@ abstract class AbstractController extends ActionController
     protected array $feUser = [];
 
     protected CategoryRepository $categoryRepository;
+    protected EmailService $emailService;
     protected EventRepository $eventRepository;
     protected FloatConverter $floatConverter;
     protected LocationRepository $locationRepository;
@@ -56,6 +56,11 @@ abstract class AbstractController extends ActionController
     public function injectCategoryRepository(CategoryRepository $categoryRepository): void
     {
         $this->categoryRepository = $categoryRepository;
+    }
+
+    public function injectEmailService(EmailService $emailService): void
+    {
+        $this->emailService = $emailService;
     }
 
     public function injectEventRepository(EventRepository $eventRepository): void
@@ -154,31 +159,31 @@ abstract class AbstractController extends ActionController
 
         if (isset($this->settings['parentCategory']) && $this->settings['parentCategory'] > 0) {
             $this->categoryRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
-            $categories = $this->categoryRepository->findByParent($this->settings['parentCategory']);
+            $categories = $this->categoryRepository->findBy(['parent' => $this->settings['parentCategory']]);
             $this->view->assign('categories', $categories);
         }
 
         if (isset($this->settings['locationStoragePid']) && $this->settings['locationStoragePid'] > 0) {
             $this->locationRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
-            $locations = $this->locationRepository->findByPid($this->settings['locationStoragePid']);
+            $locations = $this->locationRepository->findBy(['pid' => $this->settings['locationStoragePid']]);
             $this->view->assign('locations', $locations);
         }
 
         if (isset($this->settings['organisatorStoragePid']) && $this->settings['organisatorStoragePid'] > 0) {
             $this->organisatorRepository->setDefaultOrderings(['name' => QueryInterface::ORDER_ASCENDING]);
-            $organisators = $this->organisatorRepository->findByPid($this->settings['organisatorStoragePid']);
+            $organisators = $this->organisatorRepository->findBy(['pid' => $this->settings['organisatorStoragePid']]);
             $this->view->assign('organisators', $organisators);
         }
 
         if (isset($this->settings['speakerStoragePid']) && $this->settings['speakerStoragePid'] > 0) {
             $this->speakerRepository->setDefaultOrderings(['name' => QueryInterface::ORDER_ASCENDING]);
-            $speakers = $this->speakerRepository->findByPid($this->settings['speakerStoragePid']);
+            $speakers = $this->speakerRepository->findBy(['pid' => $this->settings['speakerStoragePid']]);
             $this->view->assign('speakers', $speakers);
         }
 
         if (isset($this->settings['relatedStoragePid']) && $this->settings['relatedStoragePid'] > 0) {
             $this->eventRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
-            $relatedEvents = $this->eventRepository->findByPid($this->settings['relatedStoragePid']);
+            $relatedEvents = $this->eventRepository->findBy(['pid' => $this->settings['relatedStoragePid']]);
             $this->view->assign('relatedEvents', $relatedEvents);
         }
     }
@@ -216,8 +221,6 @@ abstract class AbstractController extends ActionController
      */
     public function sendEmails(array $data)
     {
-        /** @var EmailService $emailService */
-        $emailService = GeneralUtility::makeInstance(EmailService::class);
         $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
         );
@@ -232,7 +235,7 @@ abstract class AbstractController extends ActionController
                     ];
                     $dataArr = array_merge($dataArr, $data);
 
-                    $emailService->sendEmail(
+                    $this->emailService->sendEmail(
                         ['email' => $this->settings['emailFrom'], 'name' => $this->settings['emailFromName']],
                         ['email' => $emails['container']['email'], 'name' => $emails['container']['name']],
                         $emails['container']['subject'],

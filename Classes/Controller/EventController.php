@@ -22,6 +22,7 @@ use Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSaveEvent;
 use Mediadreams\MdEventmgtFrontend\Service\SlugService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Extbase\Attribute\IgnoreValidation;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -67,7 +68,7 @@ class EventController extends AbstractController
     public function listAction(): ResponseInterface
     {
         $this->eventRepository->setDefaultOrderings(['startdate' => QueryInterface::ORDER_DESCENDING]);
-        $events = $this->eventRepository->findByMdEventmgtFeuser($this->feUser['uid']);
+        $events = $this->eventRepository->findBy(['mdEventmgtFeuser' => $this->feUser['uid']]);
         $this->assignPagination($events);
 
         return $this->htmlResponse();
@@ -142,10 +143,9 @@ class EventController extends AbstractController
      * action edit
      *
      * @param Event $event
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("event")
      * @return ResponseInterface
      */
-    public function editAction(Event $event): ResponseInterface
+    public function editAction(#[IgnoreValidation] Event $event): ResponseInterface
     {
         $this->checkAccess($event);
 

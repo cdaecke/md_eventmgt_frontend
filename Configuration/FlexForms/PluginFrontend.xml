@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <T3DataStructure>
     <sheets>
         <sDEF>
@@ -6,7 +6,6 @@
                 <sheetTitle>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.frontend.title</sheetTitle>
                 <type>array</type>
                 <el>
-
                     <settings.selectedDateFormat>
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.frontend.dateFormat</label>
                         <config>
@@ -28,7 +27,6 @@
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.frontend.parentCategory</label>
                         <config>
                             <type>group</type>
-                            <internal_type>db</internal_type>
                             <allowed>sys_category</allowed>
                             <maxitems>1</maxitems>
                             <minitems>0</minitems>
@@ -40,7 +38,6 @@
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.frontend.locationStoragePid</label>
                         <config>
                             <type>group</type>
-                            <internal_type>db</internal_type>
                             <allowed>pages</allowed>
                             <maxitems>1</maxitems>
                             <minitems>0</minitems>
@@ -52,7 +49,6 @@
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.frontend.organisatorStoragePid</label>
                         <config>
                             <type>group</type>
-                            <internal_type>db</internal_type>
                             <allowed>pages</allowed>
                             <maxitems>1</maxitems>
                             <minitems>0</minitems>
@@ -64,7 +60,6 @@
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.frontend.speakerStoragePid</label>
                         <config>
                             <type>group</type>
-                            <internal_type>db</internal_type>
                             <allowed>pages</allowed>
                             <maxitems>1</maxitems>
                             <minitems>0</minitems>
@@ -76,7 +71,6 @@
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.frontend.relatedStoragePid</label>
                         <config>
                             <type>group</type>
-                            <internal_type>db</internal_type>
                             <allowed>pages</allowed>
                             <maxitems>1</maxitems>
                             <minitems>0</minitems>
@@ -84,18 +78,15 @@
                             <default>0</default>
                         </config>
                     </settings.relatedStoragePid>
-
                 </el>
             </ROOT>
         </sDEF>
-
         <!-- Sheet: Email -->
         <email>
             <ROOT>
                 <sheetTitle>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.tab.email</sheetTitle>
                 <type>array</type>
                 <el>
-
                     <settings.emailNotification>
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailNotification</label>
                         <onChange>reload</onChange>
@@ -110,18 +101,15 @@
                             </items>
                         </config>
                     </settings.emailNotification>
-
                     <settings.emailFrom>
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailFrom</label>
                         <displayCond>FIELD:settings.emailNotification:REQ:true</displayCond>
                         <config>
-                            <type>input</type>
+                            <type>email</type>
                             <size>20</size>
-                            <eval>email,trim</eval>
                             <required>true</required>
                         </config>
                     </settings.emailFrom>
-
                     <settings.emailFromName>
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailFromName</label>
                         <displayCond>FIELD:settings.emailNotification:REQ:true</displayCond>
@@ -131,7 +119,6 @@
                             <eval>trim</eval>
                         </config>
                     </settings.emailFromName>
-
                     <settings.emailItems>
                         <displayCond>FIELD:settings.emailNotification:REQ:true</displayCond>
                         <section>1</section>
@@ -142,7 +129,7 @@
                                 <type>array</type>
                                 <title>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailReceivers.add</title>
                                 <el>
-                                <template>
+                                    <template>
                                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.template</label>
                                         <config>
                                             <type>select</type>
@@ -166,9 +153,8 @@
                                     <email>
                                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.emailTo.email</label>
                                         <config>
-                                            <type>input</type>
+                                            <type>email</type>
                                             <size>48</size>
-                                            <eval>email,trim</eval>
                                             <required>true</required>
                                         </config>
                                     </email>
@@ -202,18 +188,15 @@
                             </container>
                         </el>
                     </settings.emailItems>
-
                 </el>
             </ROOT>
         </email>
-
         <!-- Sheet: Template -->
         <template>
             <ROOT>
                 <sheetTitle>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.tab.template</sheetTitle>
                 <type>array</type>
                 <el>
-
                     <!-- Template Layout -->
                     <settings.templateLayout>
                         <label>LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:flexform.templateLayout</label>
@@ -223,16 +206,14 @@
                             <itemsProcFunc>Mediadreams\MdEventmgtFrontend\Hooks\TemplateLayouts->getTemplateLayouts</itemsProcFunc>
                             <items>
                                 <numIndex index="0">
-                                    <label></label>
-                                    <value></value>
+                                    <label/>
+                                    <value/>
                                 </numIndex>
                             </items>
                         </config>
                     </settings.templateLayout>
-
                 </el>
             </ROOT>
         </template>
-
     </sheets>
 </T3DataStructure>
