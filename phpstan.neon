@@ -1,0 +1,16 @@
+includes:
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    level: 8
+
+    paths:
+        - Classes
+
+    excludePaths:
+        - vendor
+
+    treatPhpDocTypesAsCertain: false
+
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false

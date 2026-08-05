@@ -27,6 +27,15 @@
 		"typo3/cms-core": "^14.3",
 		"derhansen/sf_event_mgt": "^9.0"
 	},
+	"require-dev": {
+		"a9f/typo3-fractor": "^0.4",
+		"phpstan/phpstan": "^2.1",
+		"phpstan/phpstan-deprecation-rules": "^2.0",
+		"phpunit/phpunit": "^11.2.5 || ^12.1.2 || ^13.0.2",
+		"rector/rector": "^2.0",
+		"ssch/typo3-rector": "^3.0",
+		"typo3/testing-framework": "^9.5"
+	},
 	"autoload": {
 		"psr-4": {
 			"Mediadreams\\MdEventmgtFrontend\\": "Classes"
