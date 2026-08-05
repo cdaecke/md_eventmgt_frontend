@@ -238,6 +238,39 @@
 				<source>You are not allowed to edit this record.</source>
 				<target>Sie sind nicht berechtigt diesen Beitrag zu bearbeiten.</target>
 			</trans-unit>
+
+			<trans-unit id="email.eventData.headline" resname="email.eventData.headline">
+				<source>Event data</source>
+				<target>Veranstaltungsdaten</target>
+			</trans-unit>
+			<trans-unit id="email.eventData.user" resname="email.eventData.user">
+				<source>Event of:</source>
+				<target>Veranstaltung von:</target>
+			</trans-unit>
+			<trans-unit id="email.eventData.uid" resname="email.eventData.uid">
+				<source>Event Id:</source>
+				<target>Veranstaltungs-ID:</target>
+			</trans-unit>
+			<trans-unit id="email.eventData.date" resname="email.eventData.date">
+				<source>Date:</source>
+				<target>Datum:</target>
+			</trans-unit>
+			<trans-unit id="email.eventData.until" resname="email.eventData.until">
+				<source>until</source>
+				<target>bis</target>
+			</trans-unit>
+			<trans-unit id="email.eventData.title" resname="email.eventData.title">
+				<source>Title:</source>
+				<target>Titel:</target>
+			</trans-unit>
+			<trans-unit id="email.eventData.teaser" resname="email.eventData.teaser">
+				<source>Teaser:</source>
+				<target>Teaser:</target>
+			</trans-unit>
+			<trans-unit id="email.eventData.description" resname="email.eventData.description">
+				<source>Description:</source>
+				<target>Beschreibung:</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

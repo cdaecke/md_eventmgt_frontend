@@ -71,11 +71,14 @@ class EmailService
             $to = new Address($toArr['email'], $toArr['name']);
         }
 
-        // Templates live in a dedicated "Email" subfolder of the Extbase template root path
+        // Templates live in a dedicated "Email" subfolder of the Extbase template root paths
         $email = $this->templatedEmailFactory->createWithOverrides(
-            templateRootPaths: [$this->getViewPath($extbaseFrameworkConfiguration, 'templateRootPaths') . 'Email/'],
-            layoutRootPaths: [$this->getViewPath($extbaseFrameworkConfiguration, 'layoutRootPaths')],
-            partialRootPaths: [$this->getViewPath($extbaseFrameworkConfiguration, 'partialRootPaths')],
+            templateRootPaths: array_map(
+                static fn (string $path): string => $path . 'Email/',
+                $this->getViewPaths($extbaseFrameworkConfiguration, 'templateRootPaths')
+            ),
+            layoutRootPaths: $this->getViewPaths($extbaseFrameworkConfiguration, 'layoutRootPaths'),
+            partialRootPaths: $this->getViewPaths($extbaseFrameworkConfiguration, 'partialRootPaths'),
             request: $request,
         );
 
@@ -96,10 +99,18 @@ class EmailService
     }
 
     /**
-     * Resolve the last configured Extbase view path (templateRootPaths/layoutRootPaths/partialRootPaths)
+     * Resolve all configured Extbase view paths (templateRootPaths/layoutRootPaths/partialRootPaths),
+     * skipping empty entries left by an unset TypoScript constant or Site Setting default.
+     *
+     * @return string[]
      */
-    private function getViewPath(array $extbaseFrameworkConfiguration, string $type): string
+    private function getViewPaths(array $extbaseFrameworkConfiguration, string $type): array
     {
-        return GeneralUtility::getFileAbsFileName(end($extbaseFrameworkConfiguration['view'][$type]));
+        $paths = array_filter($extbaseFrameworkConfiguration['view'][$type] ?? []);
+
+        return array_map(
+            static fn (string $path): string => GeneralUtility::getFileAbsFileName($path),
+            $paths
+        );
     }
 }

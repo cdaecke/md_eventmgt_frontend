@@ -182,6 +182,31 @@
 			<trans-unit id="controller.access_error" resname="controller.access_error">
 				<source>You are not allowed to edit this record.</source>
 			</trans-unit>
+
+			<trans-unit id="email.eventData.headline" resname="email.eventData.headline">
+				<source>Event data</source>
+			</trans-unit>
+			<trans-unit id="email.eventData.user" resname="email.eventData.user">
+				<source>Event of:</source>
+			</trans-unit>
+			<trans-unit id="email.eventData.uid" resname="email.eventData.uid">
+				<source>Event Id:</source>
+			</trans-unit>
+			<trans-unit id="email.eventData.date" resname="email.eventData.date">
+				<source>Date:</source>
+			</trans-unit>
+			<trans-unit id="email.eventData.until" resname="email.eventData.until">
+				<source>until</source>
+			</trans-unit>
+			<trans-unit id="email.eventData.title" resname="email.eventData.title">
+				<source>Title:</source>
+			</trans-unit>
+			<trans-unit id="email.eventData.teaser" resname="email.eventData.teaser">
+				<source>Teaser:</source>
+			</trans-unit>
+			<trans-unit id="email.eventData.description" resname="email.eventData.description">
+				<source>Description:</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
