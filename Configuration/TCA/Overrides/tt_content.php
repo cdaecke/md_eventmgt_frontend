@@ -14,7 +14,7 @@ $frontendPluginSignature = \TYPO3\CMS\Extbase\Utility\ExtensionUtility::register
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
-    '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.plugin,pi_flexform,pages,recursive',
+    'pages,recursive',
     $frontendPluginSignature,
-    'after:palette:headers',
+    'after:pi_flexform',
 );
