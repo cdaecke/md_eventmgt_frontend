@@ -9,12 +9,8 @@ use Ssch\TYPO3Rector\Set\Typo3SetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
-        __DIR__ . '/Classes',
-        __DIR__ . '/Configuration',
-    ]);
-
-    $rectorConfig->skip([
-        __DIR__ . '/vendor',
+        __DIR__ . '/../../Classes',
+        __DIR__ . '/../../Configuration',
     ]);
 
     $rectorConfig->sets([

@@ -1,0 +1,15 @@
+includes:
+    - ../../.Build/vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    level: 8
+
+    paths:
+        - ../../Classes
+
+    treatPhpDocTypesAsCertain: false
+
+    # Matches derhansen/sf_event_mgt's own phpstan config: array value types are
+    # not tracked in this codebase's PHPDoc conventions.
+    ignoreErrors:
+        - identifier: missingType.iterableValue

@@ -57,6 +57,9 @@
 		}
 	},
 	"scripts": {
+		"lint:fractor": "fractor process --dry-run --config=Build/fractor/config.php",
+		"lint:phpstan": "phpstan analyse -c Build/phpstan/phpstan.neon",
+		"lint:rector": "rector process --dry-run --config=Build/rector/config.php",
 		"test:unit": "phpunit -c Build/phpunit/UnitTests.xml",
 		"test:functional": "phpunit -c Build/phpunit/FunctionalTests.xml"
 	},
