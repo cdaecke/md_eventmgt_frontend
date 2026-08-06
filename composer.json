@@ -63,7 +63,11 @@
 	"extra": {
 		"typo3/cms": {
 			"extension-key": "md_eventmgt_frontend",
-			"web-dir": ".Build/public"
+			"web-dir": ".Build/public",
+			"version": "3.0.1",
+			"Package": {
+				"providesPackages": {}
+			}
 		}
 	}
 }
