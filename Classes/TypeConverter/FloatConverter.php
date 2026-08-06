@@ -53,7 +53,7 @@ class FloatConverter extends \TYPO3\CMS\Extbase\Property\TypeConverter\FloatConv
             if ($posComma !== false && $posPoint === false) { // there is a comma. Let us define this is a german value with decimals
                 $source = str_replace(",", ".", $source); // transform to english notation
             } else {
-                if ($posComma === false && $posPoint !== false) { // there is a point. Let us define this is an english value with decimals
+                if ($posComma === false) { // there is a point (the only remaining case here). Let us define this is an english value with decimals
                     //$source = $source;
                 } else {
                     // at this point we have a comma and a point.

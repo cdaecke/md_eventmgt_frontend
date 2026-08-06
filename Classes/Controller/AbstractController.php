@@ -199,7 +199,7 @@ abstract class AbstractController extends ActionController
     {
         if ($event->getMdEventmgtFeuser()?->getUid() !== $this->feUser['uid']) {
             $this->addFlashMessage(
-                LocalizationUtility::translate('controller.access_error', 'md_eventmgt_frontend'),
+                LocalizationUtility::translate('controller.access_error', 'md_eventmgt_frontend') ?? '',
                 '',
                 ContextualFeedbackSeverity::ERROR
             );
@@ -219,7 +219,7 @@ abstract class AbstractController extends ActionController
      * @param array $data
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function sendEmails(array $data)
+    public function sendEmails(array $data): void
     {
         $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
@@ -253,7 +253,7 @@ abstract class AbstractController extends ActionController
     /**
      * Assign pagination to current view object
      *
-     * @param QueryResultInterface $queryResult
+     * @param QueryResultInterface<int, Event> $queryResult
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      */
     protected function assignPagination(QueryResultInterface $queryResult): void
@@ -284,7 +284,7 @@ abstract class AbstractController extends ActionController
     protected function setTime(Event $event): void
     {
         if ($this->settings['selectedDateFormat'] == 'allDay') {
-            $event->getStartdate()->setTime(0, 0, 0, 0);
+            $event->getStartdate()?->setTime(0, 0, 0, 0);
 
             if ($event->getEnddate()) {
                 $event->getEnddate()->setTime(0, 0, 0, 0);
@@ -302,9 +302,12 @@ abstract class AbstractController extends ActionController
             && isset($this->arguments['event'])
             && isset($this->request->getArguments()['event']['price'])
         ) {
+            // getPropertyMappingConfiguration() is typed to the interface, but setTypeConverter() is
+            // only declared on the concrete PropertyMappingConfiguration Extbase actually returns here.
             $this->arguments['event']
                 ->getPropertyMappingConfiguration()
                 ->forProperty('price')
+                // @phpstan-ignore method.notFound
                 ->setTypeConverter($this->floatConverter);
         }
     }

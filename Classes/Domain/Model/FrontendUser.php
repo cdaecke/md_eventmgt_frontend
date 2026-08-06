@@ -67,9 +67,14 @@ class FrontendUser extends AbstractEntity
     /**
      * Called again with initialize object, as fetching an entity from the DB does not use the constructor
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
+        // Extbase's DataMapper deliberately skips the constructor when hydrating entities from the
+        // database (see DataMapper::createEmptyObject()), so these typed properties are genuinely
+        // uninitialized for DB-loaded instances despite the constructor always setting them for `new`.
+        // @phpstan-ignore assign.propertyType, nullCoalesce.initializedProperty
         $this->usergroup = $this->usergroup ?? new ObjectStorage();
+        // @phpstan-ignore assign.propertyType, nullCoalesce.initializedProperty
         $this->image = $this->image ?? new ObjectStorage();
     }
 
@@ -380,7 +385,7 @@ class FrontendUser extends AbstractEntity
      *
      * @param string $country
      */
-    public function setCountry(string $country)
+    public function setCountry(string $country): void
     {
         $this->country = $country;
     }

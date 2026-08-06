@@ -128,10 +128,10 @@ class EventController extends AbstractController
         // Send notification emails
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
 
-        $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
+        $this->eventCacheService->flushEventCache((int)$event->getUid(), (int)$event->getPid());
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('controller.created', 'md_eventmgt_frontend'),
+            LocalizationUtility::translate('controller.created', 'md_eventmgt_frontend') ?? '',
             '',
             ContextualFeedbackSeverity::OK
         );
@@ -182,10 +182,10 @@ class EventController extends AbstractController
         // Send notification emails
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
 
-        $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
+        $this->eventCacheService->flushEventCache((int)$event->getUid(), (int)$event->getPid());
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('controller.updated', 'md_eventmgt_frontend'),
+            LocalizationUtility::translate('controller.updated', 'md_eventmgt_frontend') ?? '',
             '',
             ContextualFeedbackSeverity::OK
         );
@@ -210,14 +210,14 @@ class EventController extends AbstractController
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('controller.deleted', 'md_eventmgt_frontend'),
+            LocalizationUtility::translate('controller.deleted', 'md_eventmgt_frontend') ?? '',
             '',
             ContextualFeedbackSeverity::OK
         );
 
         $this->eventRepository->remove($event);
 
-        $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
+        $this->eventCacheService->flushEventCache((int)$event->getUid(), (int)$event->getPid());
 
         return $this->redirect('list');
     }

@@ -26,7 +26,7 @@ class TemplateLayouts
      *
      * @param array $config Configuration array
      */
-    public function getTemplateLayouts(array &$config)
+    public function getTemplateLayouts(array &$config): void
     {
         $templateLayouts = $this->getTemplateLayoutsFromTsConfig($config['flexParentDatabaseRow']['pid']);
         foreach ($templateLayouts as $index => $layout) {

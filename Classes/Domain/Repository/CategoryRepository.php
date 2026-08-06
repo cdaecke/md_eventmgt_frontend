@@ -13,10 +13,13 @@ namespace Mediadreams\MdEventmgtFrontend\Domain\Repository;
  * (c) 2021 Christoph Daecke <typo3@mediadreams.org>
  */
 
+use Mediadreams\MdEventmgtFrontend\Domain\Model\Category;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
  * The repository for Categories
+ *
+ * @extends \TYPO3\CMS\Extbase\Persistence\Repository<Category>
  */
 class CategoryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
