@@ -34,16 +34,36 @@
 		"phpunit/phpunit": "^11.2.5 || ^12.1.2 || ^13.0.2",
 		"rector/rector": "^2.0",
 		"ssch/typo3-rector": "^3.0",
+		"typo3/cms-fluid-styled-content": "^14.3",
 		"typo3/testing-framework": "^9.5"
+	},
+	"config": {
+		"allow-plugins": {
+			"a9f/fractor-extension-installer": true,
+			"typo3/cms-composer-installers": true,
+			"typo3/class-alias-loader": true
+		},
+		"bin-dir": ".Build/bin",
+		"vendor-dir": ".Build/vendor"
 	},
 	"autoload": {
 		"psr-4": {
 			"Mediadreams\\MdEventmgtFrontend\\": "Classes"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"Mediadreams\\MdEventmgtFrontend\\Tests\\": "Tests"
+		}
+	},
+	"scripts": {
+		"test:unit": "phpunit -c Build/phpunit/UnitTests.xml",
+		"test:functional": "phpunit -c Build/phpunit/FunctionalTests.xml"
+	},
 	"extra": {
 		"typo3/cms": {
-			"extension-key": "md_eventmgt_frontend"
+			"extension-key": "md_eventmgt_frontend",
+			"web-dir": ".Build/public"
 		}
 	}
 }

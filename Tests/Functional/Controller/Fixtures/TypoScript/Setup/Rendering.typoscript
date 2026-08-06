@@ -1,0 +1,6 @@
+plugin.tx_mdeventmgtfrontend_frontend.persistence.storagePid = 1
+
+page = PAGE
+page {
+  10 < styles.content.get
+}
