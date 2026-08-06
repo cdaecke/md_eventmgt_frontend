@@ -112,7 +112,7 @@ abstract class AbstractController extends ActionController
 
         if (count($this->feUser) == 0 && $this->actionMethodName != 'accessAction') {
             $uri = $this->uriBuilder->uriFor('access');
-            $response = $this->responseFactory->createResponse()
+            $response = $this->responseFactory->createResponse(307)
                 ->withHeader('Location', $uri);
 
             throw new PropagateResponseException($response, 307);
@@ -197,7 +197,7 @@ abstract class AbstractController extends ActionController
      */
     protected function checkAccess(Event $event): void
     {
-        if ($event->getMdEventmgtFeuser()->getUid() !== $this->feUser['uid']) {
+        if ($event->getMdEventmgtFeuser()?->getUid() !== $this->feUser['uid']) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('controller.access_error', 'md_eventmgt_frontend'),
                 '',
@@ -205,7 +205,7 @@ abstract class AbstractController extends ActionController
             );
 
             $uri = $this->uriBuilder->uriFor('list');
-            $response = $this->responseFactory->createResponse()
+            $response = $this->responseFactory->createResponse(307)
                 ->withHeader('Location', $uri);
 
             throw new PropagateResponseException($response, 307);
