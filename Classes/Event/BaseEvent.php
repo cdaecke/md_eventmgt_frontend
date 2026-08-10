@@ -19,7 +19,6 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 
 /**
  * Class BaseEvent
- * @package Mediadreams\MdEventmgtFrontend\Event
  */
 abstract class BaseEvent
 {

@@ -13,7 +13,6 @@ namespace Mediadreams\MdEventmgtFrontend\Domain\Model;
  * (c) 2021 Christoph Daecke <typo3@mediadreams.org>
  */
 
-use Mediadreams\MdEventmgtFrontend\Domain\Model\FrontendUser;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 

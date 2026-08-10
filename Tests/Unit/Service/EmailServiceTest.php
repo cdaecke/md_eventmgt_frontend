@@ -61,7 +61,7 @@ final class EmailServiceTest extends UnitTestCase
         $fluidEmail->method('assignMultiple')->willReturnSelf();
 
         $templatedEmailFactory = $this->createMock(TemplatedEmailFactory::class);
-        $templatedEmailFactory->expects(self::once())
+        $templatedEmailFactory->expects($this->once())
             ->method('createWithOverrides')
             ->with(
                 [$templatePath . 'Email/'],
@@ -72,7 +72,7 @@ final class EmailServiceTest extends UnitTestCase
             ->willReturn($fluidEmail);
 
         $mailer = $this->createMock(MailerInterface::class);
-        $mailer->expects(self::once())->method('send');
+        $mailer->expects($this->once())->method('send');
 
         $subject = new EmailService($templatedEmailFactory, $mailer);
 

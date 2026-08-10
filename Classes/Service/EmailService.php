@@ -22,15 +22,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class EmailService
- * @package Mediadreams\MdEventmgtFrontend\Service
  */
 class EmailService
 {
     public function __construct(
         private readonly TemplatedEmailFactory $templatedEmailFactory,
         private readonly MailerInterface $mailer,
-    ) {
-    }
+    ) {}
 
     /**
      * Send an email
@@ -74,7 +72,7 @@ class EmailService
         // Templates live in a dedicated "Email" subfolder of the Extbase template root paths
         $email = $this->templatedEmailFactory->createWithOverrides(
             templateRootPaths: array_map(
-                static fn (string $path): string => $path . 'Email/',
+                static fn(string $path): string => $path . 'Email/',
                 $this->getViewPaths($extbaseFrameworkConfiguration, 'templateRootPaths')
             ),
             layoutRootPaths: $this->getViewPaths($extbaseFrameworkConfiguration, 'layoutRootPaths'),
@@ -109,7 +107,7 @@ class EmailService
         $paths = array_filter($extbaseFrameworkConfiguration['view'][$type] ?? []);
 
         return array_map(
-            static fn (string $path): string => GeneralUtility::getFileAbsFileName($path),
+            static fn(string $path): string => GeneralUtility::getFileAbsFileName($path),
             $paths
         );
     }

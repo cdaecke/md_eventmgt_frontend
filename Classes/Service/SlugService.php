@@ -20,7 +20,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class SlugService
- * @package Mediadreams\MdEventmgtFrontend\Service
  */
 class SlugService
 {

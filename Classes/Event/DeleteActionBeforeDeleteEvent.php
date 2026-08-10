@@ -13,14 +13,8 @@ namespace Mediadreams\MdEventmgtFrontend\Event;
  * (c) 2022 Christoph Daecke <typo3@mediadreams.org>
  */
 
-
 /**
  * Class DeleteActionBeforeDeleteEvent
  * This event is triggered just before event will be deleted.
- *
- * @package Mediadreams\MdEventmgtFrontend\Event
  */
-final class DeleteActionBeforeDeleteEvent extends BaseEvent
-{
-
-}
+final class DeleteActionBeforeDeleteEvent extends BaseEvent {}

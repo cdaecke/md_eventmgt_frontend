@@ -17,8 +17,8 @@ $tmp_md_eventmgt_frontend_columns = [
             'suggestOptions' => [
                 'default' => [
                     'additionalSearchFields' => 'name, first_name, last_name',
-                ]
-            ]
+                ],
+            ],
         ],
     ],
 

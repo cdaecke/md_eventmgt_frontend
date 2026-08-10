@@ -29,7 +29,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class EventController
- * @package Mediadreams\MdEventmgtFrontend\Controller
  */
 class EventController extends AbstractController
 {

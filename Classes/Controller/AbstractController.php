@@ -34,7 +34,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class AbstractController
- * @package Mediadreams\MdEventmgtFrontend\Controller
  */
 abstract class AbstractController extends ActionController
 {
@@ -154,7 +153,7 @@ abstract class AbstractController extends ActionController
         $this->view->assignMultiple([
             'feUser' => $this->feUser,
             'contentObjectData' => $this->request->getAttribute('currentContentObject')->data,
-            'pageData' => $this->request->getAttribute('frontend.page.information')->getPageRecord()
+            'pageData' => $this->request->getAttribute('frontend.page.information')->getPageRecord(),
         ]);
 
         if (isset($this->settings['parentCategory']) && $this->settings['parentCategory'] > 0) {
@@ -231,7 +230,7 @@ abstract class AbstractController extends ActionController
                     $dataArr = [
                         'email' => $emails['container']['email'],
                         'name' => $emails['container']['name'],
-                        'body' => $emails['container']['body']
+                        'body' => $emails['container']['body'],
                     ];
                     $dataArr = array_merge($dataArr, $data);
 

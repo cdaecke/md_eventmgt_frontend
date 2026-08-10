@@ -17,7 +17,6 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
  * (c) 2021 Christoph Daecke <typo3@mediadreams.org>
  */
 
-
 /**
  * The repository for FrontendUsers
  *
@@ -27,10 +26,8 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
     /**
      * Disable storage page for all repository calls
-     *
-     * @return void
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);

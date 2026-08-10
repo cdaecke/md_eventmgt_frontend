@@ -20,7 +20,4 @@ use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
  *
  * @extends \TYPO3\CMS\Extbase\Persistence\Repository<Event>
  */
-class EventRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
-{
-
-}
+class EventRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {}

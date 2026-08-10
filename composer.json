@@ -29,12 +29,14 @@
 	},
 	"require-dev": {
 		"a9f/typo3-fractor": "^0.4",
+		"friendsofphp/php-cs-fixer": "^3.95",
 		"phpstan/phpstan": "^2.1",
 		"phpstan/phpstan-deprecation-rules": "^2.0",
 		"phpunit/phpunit": "^11.2.5 || ^12.1.2 || ^13.0.2",
 		"rector/rector": "^2.0",
 		"ssch/typo3-rector": "^3.0",
 		"typo3/cms-fluid-styled-content": "^14.3",
+		"typo3/coding-standards": "^0.9.0",
 		"typo3/testing-framework": "^9.5"
 	},
 	"config": {
@@ -57,6 +59,8 @@
 		}
 	},
 	"scripts": {
+		"fix:cs-fixer": "php-cs-fixer fix --config=Build/php-cs-fixer/config.php",
+		"lint:cs-fixer": "php-cs-fixer fix --config=Build/php-cs-fixer/config.php --dry-run --diff",
 		"lint:fractor": "fractor process --dry-run --config=Build/fractor/config.php",
 		"lint:phpstan": "phpstan analyse -c Build/phpstan/phpstan.neon",
 		"lint:rector": "rector process --dry-run --config=Build/rector/config.php",
