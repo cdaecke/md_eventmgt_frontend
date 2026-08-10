@@ -22,8 +22,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class FrontendUser extends AbstractEntity
 {
-    protected string $username = '';
-    protected string $password = '';
     protected string $name = '';
     protected string $firstName = '';
     protected string $middleName = '';
@@ -38,7 +36,7 @@ class FrontendUser extends AbstractEntity
     protected string $country = '';
     protected string $www = '';
     protected string $company = '';
-    protected ?\DateTime $lastlogin;
+    protected ?\DateTime $lastlogin = null;
 
     /**
      * @var ObjectStorage<FrontendUserGroup>
@@ -56,10 +54,8 @@ class FrontendUser extends AbstractEntity
      * @param string $username
      * @param string $password
      */
-    public function __construct(string $username = '', string $password = '')
+    public function __construct(protected string $username = '', protected string $password = '')
     {
-        $this->username = $username;
-        $this->password = $password;
         $this->usergroup = new ObjectStorage();
         $this->image = new ObjectStorage();
     }
@@ -72,10 +68,10 @@ class FrontendUser extends AbstractEntity
         // Extbase's DataMapper deliberately skips the constructor when hydrating entities from the
         // database (see DataMapper::createEmptyObject()), so these typed properties are genuinely
         // uninitialized for DB-loaded instances despite the constructor always setting them for `new`.
-        // @phpstan-ignore assign.propertyType, nullCoalesce.initializedProperty
-        $this->usergroup = $this->usergroup ?? new ObjectStorage();
-        // @phpstan-ignore assign.propertyType, nullCoalesce.initializedProperty
-        $this->image = $this->image ?? new ObjectStorage();
+        // @phpstan-ignore nullCoalesce.initializedProperty
+        $this->usergroup ??= new ObjectStorage();
+        // @phpstan-ignore nullCoalesce.initializedProperty
+        $this->image ??= new ObjectStorage();
     }
 
     /**

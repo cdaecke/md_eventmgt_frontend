@@ -107,7 +107,7 @@ class EmailService
         $paths = array_filter($extbaseFrameworkConfiguration['view'][$type] ?? []);
 
         return array_map(
-            static fn(string $path): string => GeneralUtility::getFileAbsFileName($path),
+            GeneralUtility::getFileAbsFileName(...),
             $paths
         );
     }

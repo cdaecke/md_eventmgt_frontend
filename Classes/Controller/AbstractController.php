@@ -198,7 +198,7 @@ abstract class AbstractController extends ActionController
     {
         if ($event->getMdEventmgtFeuser()?->getUid() !== $this->feUser['uid']) {
             $this->addFlashMessage(
-                LocalizationUtility::translate('controller.access_error', 'md_eventmgt_frontend') ?? '',
+                LocalizationUtility::translate('controller.access_error', 'MdEventmgtFrontend') ?? '',
                 '',
                 ContextualFeedbackSeverity::ERROR
             );

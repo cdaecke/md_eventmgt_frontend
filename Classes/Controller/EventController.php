@@ -32,25 +32,9 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class EventController extends AbstractController
 {
-    protected EventCacheService $eventCacheService;
-    protected PersistenceManager $persistenceManager;
-    protected SlugService $slugService;
-
-    public function injectEventCacheService(EventCacheService $eventCacheService): void
+    public function __construct(protected EventCacheService $eventCacheService, protected PersistenceManager $persistenceManager, protected SlugService $slugService)
     {
-        $this->eventCacheService = $eventCacheService;
     }
-
-    public function injectPersistenceManager(PersistenceManager $persistenceManager): void
-    {
-        $this->persistenceManager = $persistenceManager;
-    }
-
-    public function injectSlugService(SlugService $slugService): void
-    {
-        $this->slugService = $slugService;
-    }
-
     /**
      * This will be called, if user is not logged in
      */
@@ -130,7 +114,7 @@ class EventController extends AbstractController
         $this->eventCacheService->flushEventCache((int)$event->getUid(), (int)$event->getPid());
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('controller.created', 'md_eventmgt_frontend') ?? '',
+            LocalizationUtility::translate('controller.created', 'MdEventmgtFrontend') ?? '',
             '',
             ContextualFeedbackSeverity::OK
         );
@@ -184,7 +168,7 @@ class EventController extends AbstractController
         $this->eventCacheService->flushEventCache((int)$event->getUid(), (int)$event->getPid());
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('controller.updated', 'md_eventmgt_frontend') ?? '',
+            LocalizationUtility::translate('controller.updated', 'MdEventmgtFrontend') ?? '',
             '',
             ContextualFeedbackSeverity::OK
         );
@@ -209,7 +193,7 @@ class EventController extends AbstractController
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('controller.deleted', 'md_eventmgt_frontend') ?? '',
+            LocalizationUtility::translate('controller.deleted', 'MdEventmgtFrontend') ?? '',
             '',
             ContextualFeedbackSeverity::OK
         );

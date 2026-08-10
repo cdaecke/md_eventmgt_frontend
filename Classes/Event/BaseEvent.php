@@ -22,11 +22,6 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
  */
 abstract class BaseEvent
 {
-    private Event $event;
-    private EventController $eventController;
-    private array $settings;
-    private RequestInterface $request;
-
     /**
      * BaseEvent constructor.
      *
@@ -34,12 +29,8 @@ abstract class BaseEvent
      * @param EventController $eventController
      * @param array $settings
      */
-    public function __construct(Event $event, EventController $eventController, array $settings, RequestInterface $request)
+    public function __construct(private Event $event, private readonly EventController $eventController, private array $settings, private readonly RequestInterface $request)
     {
-        $this->event = $event;
-        $this->eventController = $eventController;
-        $this->settings = $settings;
-        $this->request = $request;
     }
 
     public function getEvent(): Event
