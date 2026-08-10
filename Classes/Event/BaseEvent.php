@@ -29,9 +29,7 @@ abstract class BaseEvent
      * @param EventController $eventController
      * @param array $settings
      */
-    public function __construct(private Event $event, private readonly EventController $eventController, private array $settings, private readonly RequestInterface $request)
-    {
-    }
+    public function __construct(private Event $event, private readonly EventController $eventController, private array $settings, private readonly RequestInterface $request) {}
 
     public function getEvent(): Event
     {

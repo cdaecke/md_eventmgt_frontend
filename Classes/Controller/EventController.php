@@ -32,9 +32,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class EventController extends AbstractController
 {
-    public function __construct(protected EventCacheService $eventCacheService, protected PersistenceManager $persistenceManager, protected SlugService $slugService)
-    {
-    }
+    public function __construct(protected EventCacheService $eventCacheService, protected PersistenceManager $persistenceManager, protected SlugService $slugService) {}
     /**
      * This will be called, if user is not logged in
      */
