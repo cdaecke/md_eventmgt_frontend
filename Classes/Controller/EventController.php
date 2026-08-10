@@ -21,7 +21,10 @@ use Mediadreams\MdEventmgtFrontend\Event\DeleteActionBeforeDeleteEvent;
 use Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSaveEvent;
 use Mediadreams\MdEventmgtFrontend\Service\SlugService;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Html\SanitizerBuilderFactory;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Attribute\IgnoreValidation;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -88,6 +91,7 @@ class EventController extends AbstractController
     {
         $event->setMdEventmgtFeuserByUid($this->feUser['uid']);
         $this->setTime($event);
+        $this->sanitizeUserProvidedHtml($event);
 
         // PSR-14 Event
         $this->eventDispatcher->dispatch(new CreateActionBeforeSaveEvent($event, $this, $this->settings, $this->request));
@@ -154,6 +158,7 @@ class EventController extends AbstractController
         $this->checkAccess($event);
 
         $this->setTime($event);
+        $this->sanitizeUserProvidedHtml($event);
 
         // PSR-14 Event
         $this->eventDispatcher->dispatch(new UpdateActionBeforeSaveEvent($event, $this, $this->settings, $this->request));
@@ -172,6 +177,35 @@ class EventController extends AbstractController
         );
 
         return $this->redirect('list');
+    }
+
+    /**
+     * Reject deletion requests that were not sent as POST.
+     *
+     * A GET-triggerable delete allows the action to be invoked by a mere link or an <img> tag -
+     * something an attacker can embed anywhere a logged-in user's browser will load it, using
+     * that user's own session to delete their own data without their intent (CSRF). Requiring
+     * POST closes that off: browsers can only ever send POST via an actual form submission, and
+     * SameSite=Lax (TYPO3's default fe_typo_user cookie policy) withholds the session cookie from
+     * cross-site POST submissions.
+     *
+     * @throws \TYPO3\CMS\Core\Http\PropagateResponseException
+     */
+    public function initializeDeleteAction(): void
+    {
+        if ($this->request->getMethod() !== 'POST') {
+            $this->addFlashMessage(
+                LocalizationUtility::translate('controller.invalid_request', 'MdEventmgtFrontend') ?? '',
+                '',
+                ContextualFeedbackSeverity::ERROR
+            );
+
+            $uri = $this->uriBuilder->uriFor('list');
+            $response = $this->responseFactory->createResponse(307)
+                ->withHeader('Location', $uri);
+
+            throw new PropagateResponseException($response, 307);
+        }
     }
 
     /**
@@ -203,4 +237,19 @@ class EventController extends AbstractController
         return $this->redirect('list');
     }
 
+    /**
+     * Sanitize the free-text fields the frontend form offers for editing (teaser/description/program).
+     * Extbase persistence bypasses the DataHandler/RTE transformation pipeline entirely, so nothing
+     * else strips dangerous markup before this is stored - and sf_event_mgt's own Detail template
+     * renders description/program via f:format.html (escaping disabled), so this needs to happen on
+     * write, not on read: we don't control sf_event_mgt's templates or any other consumer of this data.
+     */
+    private function sanitizeUserProvidedHtml(Event $event): void
+    {
+        $sanitizer = GeneralUtility::makeInstance(SanitizerBuilderFactory::class)->build('default')->build();
+
+        $event->setTeaser($sanitizer->sanitize($event->getTeaser()));
+        $event->setDescription($sanitizer->sanitize($event->getDescription()));
+        $event->setProgram($sanitizer->sanitize($event->getProgram()));
+    }
 }

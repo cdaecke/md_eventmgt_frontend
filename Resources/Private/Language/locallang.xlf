@@ -182,6 +182,9 @@
 			<trans-unit id="controller.access_error" resname="controller.access_error">
 				<source>You are not allowed to edit this record.</source>
 			</trans-unit>
+			<trans-unit id="controller.invalid_request" resname="controller.invalid_request">
+				<source>This action is not allowed.</source>
+			</trans-unit>
 
 			<trans-unit id="email.eventData.headline" resname="email.eventData.headline">
 				<source>Event data</source>

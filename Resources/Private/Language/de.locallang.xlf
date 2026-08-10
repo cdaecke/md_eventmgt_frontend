@@ -238,6 +238,10 @@
 				<source>You are not allowed to edit this record.</source>
 				<target>Sie sind nicht berechtigt diesen Beitrag zu bearbeiten.</target>
 			</trans-unit>
+			<trans-unit id="controller.invalid_request" resname="controller.invalid_request">
+				<source>This action is not allowed.</source>
+				<target>Diese Aktion ist nicht erlaubt.</target>
+			</trans-unit>
 
 			<trans-unit id="email.eventData.headline" resname="email.eventData.headline">
 				<source>Event data</source>

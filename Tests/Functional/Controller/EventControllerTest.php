@@ -134,6 +134,35 @@ final class EventControllerTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function updateActionSanitizesDangerousHtmlInTeaserDescriptionAndProgram(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/Database/EventController/EventOwnedByUserA.csv');
+
+        $this->executeRequestWithLoggedInUser([
+            'tx_mdeventmgtfrontend_frontend[__trustedProperties]' => $this->getTrustedPropertiesFromEditForm(
+                self::UID_OF_EVENT,
+            ),
+            'tx_mdeventmgtfrontend_frontend[action]' => 'update',
+            'tx_mdeventmgtfrontend_frontend[event][__identity]' => (string)self::UID_OF_EVENT,
+            'tx_mdeventmgtfrontend_frontend[event][teaser]' => 'Safe teaser <script>alert(1)</script> text',
+            'tx_mdeventmgtfrontend_frontend[event][description]' => 'Safe description <img src=x onerror="alert(1)"> text',
+            'tx_mdeventmgtfrontend_frontend[event][program]' => 'Safe program <script>alert(1)</script> text',
+        ], self::UID_OF_OWNER);
+
+        $row = $this->getConnectionPool()
+            ->getConnectionForTable('tx_sfeventmgt_domain_model_event')
+            ->select(['teaser', 'description', 'program'], 'tx_sfeventmgt_domain_model_event', ['uid' => self::UID_OF_EVENT])
+            ->fetchAssociative();
+
+        foreach (['teaser', 'description', 'program'] as $field) {
+            self::assertStringNotContainsStringIgnoringCase('<script', $row[$field], "Field \"$field\" still contains a <script> tag");
+            self::assertStringNotContainsStringIgnoringCase('onerror', $row[$field], "Field \"$field\" still contains an onerror handler");
+            self::assertStringContainsString('Safe', $row[$field], "Field \"$field\" lost its safe content");
+            self::assertStringContainsString('text', $row[$field], "Field \"$field\" lost its safe content");
+        }
+    }
+
+    #[Test]
     public function updateActionWithEventFromOtherUserRedirectsToListAndDoesNotPersistChange(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/Database/EventController/EventOwnedByUserA.csv');
@@ -162,7 +191,7 @@ final class EventControllerTest extends FunctionalTestCase
         $this->executeRequestWithLoggedInUser([
             'tx_mdeventmgtfrontend_frontend[action]' => 'delete',
             'tx_mdeventmgtfrontend_frontend[event][__identity]' => (string)self::UID_OF_EVENT,
-        ], self::UID_OF_OWNER);
+        ], self::UID_OF_OWNER, 'POST');
 
         $this->assertCSVDataSet(
             __DIR__ . '/Assertions/Database/EventController/Delete/SoftDeletedEvent.csv',
@@ -177,7 +206,7 @@ final class EventControllerTest extends FunctionalTestCase
         $response = $this->executeRequestWithLoggedInUser([
             'tx_mdeventmgtfrontend_frontend[action]' => 'delete',
             'tx_mdeventmgtfrontend_frontend[event][__identity]' => (string)self::UID_OF_EVENT,
-        ], self::UID_OF_OTHER_USER);
+        ], self::UID_OF_OTHER_USER, 'POST');
 
         self::assertRedirectsToListAction($response);
         $this->assertCSVDataSet(__DIR__ . '/Fixtures/Database/EventController/EventOwnedByUserA.csv');
@@ -191,9 +220,25 @@ final class EventControllerTest extends FunctionalTestCase
         $response = $this->executeRequestWithLoggedInUser([
             'tx_mdeventmgtfrontend_frontend[action]' => 'delete',
             'tx_mdeventmgtfrontend_frontend[event][__identity]' => (string)self::UID_OF_EVENT,
-        ], self::UID_OF_OWNER);
+        ], self::UID_OF_OWNER, 'POST');
 
         self::assertRedirectsToListAction($response);
+    }
+
+    #[Test]
+    public function deleteActionViaGetIsRejectedAndDoesNotDeleteEvent(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/Database/EventController/EventOwnedByUserA.csv');
+
+        // A GET-triggerable delete could be invoked via a mere <img>/<a> tag, using the victim's
+        // own session without their intent (CSRF). deleteAction must only accept POST.
+        $response = $this->executeRequestWithLoggedInUser([
+            'tx_mdeventmgtfrontend_frontend[action]' => 'delete',
+            'tx_mdeventmgtfrontend_frontend[event][__identity]' => (string)self::UID_OF_EVENT,
+        ], self::UID_OF_OWNER, 'GET');
+
+        self::assertRedirectsToListAction($response);
+        $this->assertCSVDataSet(__DIR__ . '/Fixtures/Database/EventController/EventOwnedByUserA.csv');
     }
 
     #[Test]
@@ -219,11 +264,12 @@ final class EventControllerTest extends FunctionalTestCase
      * @param array<string, string> $queryParameters
      * @param positive-int $userUid
      */
-    private function executeRequestWithLoggedInUser(array $queryParameters, int $userUid): ResponseInterface
+    private function executeRequestWithLoggedInUser(array $queryParameters, int $userUid, string $method = 'GET'): ResponseInterface
     {
         $request = (new InternalRequest())
             ->withPageId(self::UID_OF_PAGE)
-            ->withQueryParameters($queryParameters);
+            ->withQueryParameters($queryParameters)
+            ->withMethod($method);
 
         $context = (new InternalRequestContext())->withFrontendUserId($userUid);
 
