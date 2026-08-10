@@ -107,7 +107,12 @@ abstract class AbstractController extends ActionController
     {
         parent::initializeAction();
 
-        $this->feUser = $this->request->getAttribute('frontend.user')->user ?? [];
+        // Strip fields that must never reach a Fluid view or outgoing email: the password hash,
+        // and the password-reset token EXT:felogin adds to fe_users (comparable impact to a
+        // leaked password hash - it alone is enough to complete a password reset).
+        $user = $this->request->getAttribute('frontend.user')->user ?? [];
+        unset($user['password'], $user['felogin_forgotHash']);
+        $this->feUser = $user;
 
         if (count($this->feUser) == 0 && $this->actionMethodName != 'accessAction') {
             $uri = $this->uriBuilder->uriFor('access');
