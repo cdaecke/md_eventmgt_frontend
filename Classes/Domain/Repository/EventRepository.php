@@ -13,10 +13,11 @@ namespace Mediadreams\MdEventmgtFrontend\Domain\Repository;
  * (c) 2021 Christoph Daecke <typo3@mediadreams.org>
  */
 
+use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
+
 /**
  * The repository for Events
+ *
+ * @extends \TYPO3\CMS\Extbase\Persistence\Repository<Event>
  */
-class EventRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
-{
-
-}
+class EventRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {}

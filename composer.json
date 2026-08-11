@@ -24,17 +24,78 @@
 		"source": "https://github.com/cdaecke/md_eventmgt_frontend"
 	},
 	"require": {
-		"typo3/cms-core": "^13.4",
-		"derhansen/sf_event_mgt": "^8.0"
+		"typo3/cms-core": "^14.3",
+		"derhansen/sf_event_mgt": "^9.0"
+	},
+	"require-dev": {
+		"a9f/typo3-fractor": "^0.4",
+		"friendsofphp/php-cs-fixer": "^3.95",
+		"phpstan/phpstan": "^2.1",
+		"phpstan/phpstan-deprecation-rules": "^2.0",
+		"phpunit/phpunit": "^11.2.5 || ^12.1.2 || ^13.0.2",
+		"rector/rector": "^2.0",
+		"ssch/typo3-rector": "^3.0",
+		"typo3/cms-fluid-styled-content": "^14.3",
+		"typo3/coding-standards": "^0.9.0",
+		"typo3/testing-framework": "^9.5"
+	},
+	"config": {
+		"allow-plugins": {
+			"a9f/fractor-extension-installer": true,
+			"typo3/cms-composer-installers": true,
+			"typo3/class-alias-loader": true
+		},
+		"bin-dir": ".Build/bin",
+		"vendor-dir": ".Build/vendor"
 	},
 	"autoload": {
 		"psr-4": {
 			"Mediadreams\\MdEventmgtFrontend\\": "Classes"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"Mediadreams\\MdEventmgtFrontend\\Tests\\": "Tests"
+		}
+	},
+	"scripts": {
+		"fix:cs-fixer": "php-cs-fixer fix --config=Build/php-cs-fixer/config.php",
+		"lint": [
+			"@lint:phpstan",
+			"@lint:rector",
+			"@lint:fractor",
+			"@lint:cs-fixer"
+		],
+		"lint:cs-fixer": "php-cs-fixer fix --config=Build/php-cs-fixer/config.php --dry-run --diff",
+		"lint:fractor": "fractor process --dry-run --config=Build/fractor/config.php",
+		"lint:phpstan": "phpstan analyse -c Build/phpstan/phpstan.neon",
+		"lint:rector": "rector process --dry-run --config=Build/rector/config.php",
+		"test": [
+			"@test:unit",
+			"@test:functional"
+		],
+		"test:functional": "typo3DatabaseDriver=pdo_sqlite phpunit -c Build/phpunit/FunctionalTests.xml",
+		"test:unit": "phpunit -c Build/phpunit/UnitTests.xml"
+	},
+	"scripts-descriptions": {
+		"fix:cs-fixer": "Fixes the code style with PHP-CS-Fixer.",
+		"lint": "Runs all static checks (types, modernization, config files, code style).",
+		"lint:cs-fixer": "Checks the code style with PHP-CS-Fixer.",
+		"lint:fractor": "Checks Configuration/Resources files for changes by Fractor.",
+		"lint:phpstan": "Runs static analysis with PHPStan.",
+		"lint:rector": "Checks the code for changes by Rector.",
+		"test": "Runs all tests (unit + functional).",
+		"test:functional": "Runs the functional tests.",
+		"test:unit": "Runs the unit tests."
+	},
 	"extra": {
 		"typo3/cms": {
-			"extension-key": "md_eventmgt_frontend"
+			"extension-key": "md_eventmgt_frontend",
+			"web-dir": ".Build/public",
+			"version": "3.0.1",
+			"Package": {
+				"providesPackages": {}
+			}
 		}
 	}
 }

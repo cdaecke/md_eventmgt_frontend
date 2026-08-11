@@ -16,10 +16,5 @@ namespace Mediadreams\MdEventmgtFrontend\Domain\Model;
 /**
  * Class Category
  * This is needed, because we use our own CategoryRepository
- *
- * @package Mediadreams\MdEventmgtFrontend\Domain\Model
  */
-class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
-{
-
-}
+class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category {}

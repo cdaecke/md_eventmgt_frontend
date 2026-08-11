@@ -8,18 +8,13 @@ $frontendPluginSignature = \TYPO3\CMS\Extbase\Utility\ExtensionUtility::register
     'Event management frontend',
     null,
     null,
-    'Plugin for manage entries of ext:sf_event_mgt in the frontend.'
+    'Plugin for manage entries of ext:sf_event_mgt in the frontend.',
+    'FILE:EXT:md_eventmgt_frontend/Configuration/FlexForms/PluginFrontend.xml',
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
-    '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.plugin,pi_flexform,pages,recursive',
+    'pages,recursive',
     $frontendPluginSignature,
-    'after:palette:headers',
-);
-
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
-    '',
-    'FILE:EXT:md_eventmgt_frontend/Configuration/FlexForms/PluginFrontend.xml',
-    $frontendPluginSignature,
+    'after:pi_flexform',
 );

@@ -24,7 +24,6 @@ use Mediadreams\MdEventmgtFrontend\TypeConverter\FloatConverter;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
@@ -35,7 +34,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class AbstractController
- * @package Mediadreams\MdEventmgtFrontend\Controller
  */
 abstract class AbstractController extends ActionController
 {
@@ -47,6 +45,7 @@ abstract class AbstractController extends ActionController
     protected array $feUser = [];
 
     protected CategoryRepository $categoryRepository;
+    protected EmailService $emailService;
     protected EventRepository $eventRepository;
     protected FloatConverter $floatConverter;
     protected LocationRepository $locationRepository;
@@ -56,6 +55,11 @@ abstract class AbstractController extends ActionController
     public function injectCategoryRepository(CategoryRepository $categoryRepository): void
     {
         $this->categoryRepository = $categoryRepository;
+    }
+
+    public function injectEmailService(EmailService $emailService): void
+    {
+        $this->emailService = $emailService;
     }
 
     public function injectEventRepository(EventRepository $eventRepository): void
@@ -103,11 +107,16 @@ abstract class AbstractController extends ActionController
     {
         parent::initializeAction();
 
-        $this->feUser = $this->request->getAttribute('frontend.user')->user ?? [];
+        // Strip fields that must never reach a Fluid view or outgoing email: the password hash,
+        // and the password-reset token EXT:felogin adds to fe_users (comparable impact to a
+        // leaked password hash - it alone is enough to complete a password reset).
+        $user = $this->request->getAttribute('frontend.user')->user ?? [];
+        unset($user['password'], $user['felogin_forgotHash']);
+        $this->feUser = $user;
 
         if (count($this->feUser) == 0 && $this->actionMethodName != 'accessAction') {
             $uri = $this->uriBuilder->uriFor('access');
-            $response = $this->responseFactory->createResponse()
+            $response = $this->responseFactory->createResponse(307)
                 ->withHeader('Location', $uri);
 
             throw new PropagateResponseException($response, 307);
@@ -149,36 +158,36 @@ abstract class AbstractController extends ActionController
         $this->view->assignMultiple([
             'feUser' => $this->feUser,
             'contentObjectData' => $this->request->getAttribute('currentContentObject')->data,
-            'pageData' => $this->request->getAttribute('frontend.page.information')->getPageRecord()
+            'pageData' => $this->request->getAttribute('frontend.page.information')->getPageRecord(),
         ]);
 
         if (isset($this->settings['parentCategory']) && $this->settings['parentCategory'] > 0) {
             $this->categoryRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
-            $categories = $this->categoryRepository->findByParent($this->settings['parentCategory']);
+            $categories = $this->categoryRepository->findBy(['parent' => $this->settings['parentCategory']]);
             $this->view->assign('categories', $categories);
         }
 
         if (isset($this->settings['locationStoragePid']) && $this->settings['locationStoragePid'] > 0) {
             $this->locationRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
-            $locations = $this->locationRepository->findByPid($this->settings['locationStoragePid']);
+            $locations = $this->locationRepository->findBy(['pid' => $this->settings['locationStoragePid']]);
             $this->view->assign('locations', $locations);
         }
 
         if (isset($this->settings['organisatorStoragePid']) && $this->settings['organisatorStoragePid'] > 0) {
             $this->organisatorRepository->setDefaultOrderings(['name' => QueryInterface::ORDER_ASCENDING]);
-            $organisators = $this->organisatorRepository->findByPid($this->settings['organisatorStoragePid']);
+            $organisators = $this->organisatorRepository->findBy(['pid' => $this->settings['organisatorStoragePid']]);
             $this->view->assign('organisators', $organisators);
         }
 
         if (isset($this->settings['speakerStoragePid']) && $this->settings['speakerStoragePid'] > 0) {
             $this->speakerRepository->setDefaultOrderings(['name' => QueryInterface::ORDER_ASCENDING]);
-            $speakers = $this->speakerRepository->findByPid($this->settings['speakerStoragePid']);
+            $speakers = $this->speakerRepository->findBy(['pid' => $this->settings['speakerStoragePid']]);
             $this->view->assign('speakers', $speakers);
         }
 
         if (isset($this->settings['relatedStoragePid']) && $this->settings['relatedStoragePid'] > 0) {
             $this->eventRepository->setDefaultOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
-            $relatedEvents = $this->eventRepository->findByPid($this->settings['relatedStoragePid']);
+            $relatedEvents = $this->eventRepository->findBy(['pid' => $this->settings['relatedStoragePid']]);
             $this->view->assign('relatedEvents', $relatedEvents);
         }
     }
@@ -192,15 +201,15 @@ abstract class AbstractController extends ActionController
      */
     protected function checkAccess(Event $event): void
     {
-        if ($event->getMdEventmgtFeuser()->getUid() !== $this->feUser['uid']) {
+        if ($event->getMdEventmgtFeuser()?->getUid() !== $this->feUser['uid']) {
             $this->addFlashMessage(
-                LocalizationUtility::translate('controller.access_error', 'md_eventmgt_frontend'),
+                LocalizationUtility::translate('controller.access_error', 'MdEventmgtFrontend') ?? '',
                 '',
                 ContextualFeedbackSeverity::ERROR
             );
 
             $uri = $this->uriBuilder->uriFor('list');
-            $response = $this->responseFactory->createResponse()
+            $response = $this->responseFactory->createResponse(307)
                 ->withHeader('Location', $uri);
 
             throw new PropagateResponseException($response, 307);
@@ -214,10 +223,8 @@ abstract class AbstractController extends ActionController
      * @param array $data
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function sendEmails(array $data)
+    public function sendEmails(array $data): void
     {
-        /** @var EmailService $emailService */
-        $emailService = GeneralUtility::makeInstance(EmailService::class);
         $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
         );
@@ -228,11 +235,11 @@ abstract class AbstractController extends ActionController
                     $dataArr = [
                         'email' => $emails['container']['email'],
                         'name' => $emails['container']['name'],
-                        'body' => $emails['container']['body']
+                        'body' => $emails['container']['body'],
                     ];
                     $dataArr = array_merge($dataArr, $data);
 
-                    $emailService->sendEmail(
+                    $this->emailService->sendEmail(
                         ['email' => $this->settings['emailFrom'], 'name' => $this->settings['emailFromName']],
                         ['email' => $emails['container']['email'], 'name' => $emails['container']['name']],
                         $emails['container']['subject'],
@@ -250,7 +257,7 @@ abstract class AbstractController extends ActionController
     /**
      * Assign pagination to current view object
      *
-     * @param QueryResultInterface $queryResult
+     * @param QueryResultInterface<int, Event> $queryResult
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      */
     protected function assignPagination(QueryResultInterface $queryResult): void
@@ -281,7 +288,7 @@ abstract class AbstractController extends ActionController
     protected function setTime(Event $event): void
     {
         if ($this->settings['selectedDateFormat'] == 'allDay') {
-            $event->getStartdate()->setTime(0, 0, 0, 0);
+            $event->getStartdate()?->setTime(0, 0, 0, 0);
 
             if ($event->getEnddate()) {
                 $event->getEnddate()->setTime(0, 0, 0, 0);
@@ -299,9 +306,12 @@ abstract class AbstractController extends ActionController
             && isset($this->arguments['event'])
             && isset($this->request->getArguments()['event']['price'])
         ) {
+            // getPropertyMappingConfiguration() is typed to the interface, but setTypeConverter() is
+            // only declared on the concrete PropertyMappingConfiguration Extbase actually returns here.
             $this->arguments['event']
                 ->getPropertyMappingConfiguration()
                 ->forProperty('price')
+                // @phpstan-ignore method.notFound
                 ->setTypeConverter($this->floatConverter);
         }
     }

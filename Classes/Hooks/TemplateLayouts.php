@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mediadreams\MdEventmgtFrontend\Hooks;
@@ -17,7 +18,6 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /**
  * Class TemplateLayouts
- * @package Mediadreams\MdEventmgtFrontend\Hooks
  */
 class TemplateLayouts
 {
@@ -26,13 +26,13 @@ class TemplateLayouts
      *
      * @param array $config Configuration array
      */
-    public function getTemplateLayouts(array &$config)
+    public function getTemplateLayouts(array &$config): void
     {
         $templateLayouts = $this->getTemplateLayoutsFromTsConfig($config['flexParentDatabaseRow']['pid']);
         foreach ($templateLayouts as $index => $layout) {
             $additionalLayout = [
                 $GLOBALS['LANG']->sL($layout),
-                $index
+                $index,
             ];
             array_push($config['items'], $additionalLayout);
         }
@@ -49,8 +49,8 @@ class TemplateLayouts
     {
         $templateLayouts = [];
         $pagesTsConfig = BackendUtility::getPagesTSconfig($pageUid);
-        if (isset($pagesTsConfig['tx_mdeventmgt_frontend.']['templateLayouts.']) &&
-            is_array($pagesTsConfig['tx_mdeventmgt_frontend.']['templateLayouts.'])
+        if (isset($pagesTsConfig['tx_mdeventmgt_frontend.']['templateLayouts.'])
+            && is_array($pagesTsConfig['tx_mdeventmgt_frontend.']['templateLayouts.'])
         ) {
             $templateLayouts = $pagesTsConfig['tx_mdeventmgt_frontend.']['templateLayouts.'];
         }

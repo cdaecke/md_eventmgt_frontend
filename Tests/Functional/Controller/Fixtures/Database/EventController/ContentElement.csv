@@ -1,0 +1,3 @@
+"tt_content"
+,"uid","pid","CType","header","pi_flexform"
+,1,1,"mdeventmgtfrontend_frontend","Event Management Frontend","<?xml version=""1.0"" encoding=""utf-8"" standalone=""yes"" ?><T3FlexForms><data><sheet index=""sDEF""><language index=""lDEF""><field index=""settings.selectedDateFormat""><value index=""vDEF"">allDay</value></field></language></sheet><sheet index=""email""><language index=""lDEF""><field index=""settings.emailNotification""><value index=""vDEF"">0</value></field></language></sheet></data></T3FlexForms>"

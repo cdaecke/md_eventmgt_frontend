@@ -13,28 +13,22 @@ namespace Mediadreams\MdEventmgtFrontend\Service;
  * (c) 2022 Christoph Daecke <typo3@mediadreams.org>
  */
 
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Mime\Address;
-use TYPO3\CMS\Core\Mail\MailMessage;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\MailerInterface;
+use TYPO3\CMS\Core\Mail\TemplatedEmailFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class EmailService
- * @package Mediadreams\MdEventmgtFrontend\Service
  */
 class EmailService
 {
-    /**
-     * standaloneView
-     *
-     * @var StandaloneView
-     */
-    protected $standaloneView = null;
-
-    public function __construct()
-    {
-        $this->standaloneView = GeneralUtility::makeInstance(StandaloneView::class);;
-    }
+    public function __construct(
+        private readonly TemplatedEmailFactory $templatedEmailFactory,
+        private readonly MailerInterface $mailer,
+    ) {}
 
     /**
      * Send an email
@@ -46,8 +40,9 @@ class EmailService
      * @param array $data Variables/data to be passed to template
      * @param array $settings Settings of extension
      * @param array $extbaseFrameworkConfiguration Extbase framework configuration
-     * @param \TYPO3\CMS\Extbase\Mvc\Request $request The Extbase request
+     * @param ServerRequestInterface $request The current request
      * @return bool
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     public function sendEmail(
         array $fromArr,
@@ -57,20 +52,14 @@ class EmailService
         array $data,
         array $settings,
         array $extbaseFrameworkConfiguration,
-        $request
-    ) {
+        ServerRequestInterface $request
+    ): bool {
         $from = $fromArr['email'];
         $to = $toArr['email'];
 
         if (!GeneralUtility::validEmail($from) || !GeneralUtility::validEmail($to)) {
             return false;
         }
-
-        // Initialize view for email template
-        $this->initializeView($extbaseFrameworkConfiguration, $template);
-        $this->standaloneView->assign('settings', $settings);
-        $this->standaloneView->assignMultiple($data);
-        $this->standaloneView->setRequest($request);
 
         if (!empty($fromArr['name'])) {
             $from = new Address($fromArr['email'], $fromArr['name']);
@@ -80,38 +69,46 @@ class EmailService
             $to = new Address($toArr['email'], $toArr['name']);
         }
 
-        // Send email
-        $mail = GeneralUtility::makeInstance(MailMessage::class);
-        $mail
+        // Templates live in a dedicated "Email" subfolder of the Extbase template root paths
+        $email = $this->templatedEmailFactory->createWithOverrides(
+            templateRootPaths: array_map(
+                static fn(string $path): string => $path . 'Email/',
+                $this->getViewPaths($extbaseFrameworkConfiguration, 'templateRootPaths')
+            ),
+            layoutRootPaths: $this->getViewPaths($extbaseFrameworkConfiguration, 'layoutRootPaths'),
+            partialRootPaths: $this->getViewPaths($extbaseFrameworkConfiguration, 'partialRootPaths'),
+            request: $request,
+        );
+
+        // Only HTML templates exist for this extension - requesting the default "html + plain"
+        // format would make Fluid look for a non-existent plain-text template variant.
+        $email
+            ->format(FluidEmail::FORMAT_HTML)
+            ->setTemplate(ucfirst($template))
             ->from($from)
             ->to($to)
             ->subject($subject)
-            ->html($this->standaloneView->render())
-            ->send();
+            ->assign('settings', $settings)
+            ->assignMultiple($data);
 
-        return $mail->isSent();
+        $this->mailer->send($email);
+
+        return true;
     }
 
     /**
-     * Initialize view for email templates
+     * Resolve all configured Extbase view paths (templateRootPaths/layoutRootPaths/partialRootPaths),
+     * skipping empty entries left by an unset TypoScript constant or Site Setting default.
      *
-     * @param array $extbaseFrameworkConfiguration Extbase framework configuration
-     * @param string $templateName The template name
+     * @return string[]
      */
-    protected function initializeView($extbaseFrameworkConfiguration, string $templateName): void
+    private function getViewPaths(array $extbaseFrameworkConfiguration, string $type): array
     {
-        // Templates path
-        $templateRootPath = GeneralUtility::getFileAbsFileName(end($extbaseFrameworkConfiguration['view']['templateRootPaths']));
-        $templatePathAndFilename = $templateRootPath . 'Email/' . ucfirst($templateName) . '.html';
+        $paths = array_filter($extbaseFrameworkConfiguration['view'][$type] ?? []);
 
-        // Layouts path
-        $layoutRootPath = GeneralUtility::getFileAbsFileName(end($extbaseFrameworkConfiguration['view']['layoutRootPaths']));
-        $this->standaloneView->setLayoutRootPaths(array($layoutRootPath));
-
-        // Partials path
-        $partialRootPath = GeneralUtility::getFileAbsFileName(end($extbaseFrameworkConfiguration['view']['partialRootPaths']));
-        $this->standaloneView->setPartialRootPaths(array($partialRootPath));
-
-        $this->standaloneView->setTemplatePathAndFilename($templatePathAndFilename);
+        return array_map(
+            GeneralUtility::getFileAbsFileName(...),
+            $paths
+        );
     }
 }

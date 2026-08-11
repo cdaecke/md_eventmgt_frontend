@@ -9,7 +9,6 @@ $tmp_md_eventmgt_frontend_columns = [
         'label' => 'LLL:EXT:md_eventmgt_frontend/Resources/Private/Language/locallang.xlf:tca.md_eventmgt_feuser',
         'config' => [
             'type' => 'group',
-            'internal_type' => 'db',
             'allowed' => 'fe_users',
             'maxitems' => 1,
             'minitems' => 0,
@@ -18,8 +17,8 @@ $tmp_md_eventmgt_frontend_columns = [
             'suggestOptions' => [
                 'default' => [
                     'additionalSearchFields' => 'name, first_name, last_name',
-                ]
-            ]
+                ],
+            ],
         ],
     ],
 

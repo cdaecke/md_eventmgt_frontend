@@ -20,7 +20,6 @@ use TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;
 
 /**
  * Class FloatConverter
- * @package Mediadreams\MdEventmgtFrontend\TypeConverter
  */
 class FloatConverter extends \TYPO3\CMS\Extbase\Property\TypeConverter\FloatConverter
 {
@@ -36,35 +35,35 @@ class FloatConverter extends \TYPO3\CMS\Extbase\Property\TypeConverter\FloatConv
      */
     public function convertFrom(
         $source,
-        $targetType,
-        array $convertedChildProperties = array(),
-        PropertyMappingConfigurationInterface $configuration = null
+        string $targetType,
+        array $convertedChildProperties = [],
+        ?PropertyMappingConfigurationInterface $configuration = null
     ): \TYPO3\CMS\Extbase\Error\Error|float|null {
         if ($source === null || strlen($source) === 0) {
             return null;
         }
 
-        $posComma = strpos($source, ",");
-        $posPoint = strpos($source, ".");
+        $posComma = strpos($source, ',');
+        $posPoint = strpos($source, '.');
 
         if ($posComma === false && $posPoint === false) { // should be an integer
             //$source = $source;
         } else {
             if ($posComma !== false && $posPoint === false) { // there is a comma. Let us define this is a german value with decimals
-                $source = str_replace(",", ".", $source); // transform to english notation
+                $source = str_replace(',', '.', $source); // transform to english notation
             } else {
-                if ($posComma === false && $posPoint !== false) { // there is a point. Let us define this is an english value with decimals
+                if ($posComma === false) { // there is a point (the only remaining case here). Let us define this is an english value with decimals
                     //$source = $source;
                 } else {
                     // at this point we have a comma and a point.
                     // Let us try to find out if it is 0.000,00 or 0,000.00
                     if ($posComma < $posPoint) { // 0,000.00
                         // we need no comma
-                        $source = str_replace(",", "", $source);
+                        $source = str_replace(',', '', $source);
                     } else { // 0.000,00
                         // remove the . and replace , with .
-                        $source = str_replace(".", "", $source);
-                        $source = str_replace(",", ".", $source);
+                        $source = str_replace('.', '', $source);
+                        $source = str_replace(',', '.', $source);
                     }
                 }
             }

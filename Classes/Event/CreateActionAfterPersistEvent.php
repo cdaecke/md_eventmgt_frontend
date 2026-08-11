@@ -13,15 +13,9 @@ namespace Mediadreams\MdEventmgtFrontend\Event;
  * (c) 2022 Christoph Daecke <typo3@mediadreams.org>
  */
 
-
 /**
  * Class CreateActionAfterPersistEvent
  * This event is triggered in CreateAction() after the event was persisted, so it includes the event Uid.
  * All changes on the event will be saved afterwards.
- *
- * @package Mediadreams\MdEventmgtFrontend\Event
  */
-final class CreateActionAfterPersistEvent extends BaseEvent
-{
-
-}
+final class CreateActionAfterPersistEvent extends BaseEvent {}

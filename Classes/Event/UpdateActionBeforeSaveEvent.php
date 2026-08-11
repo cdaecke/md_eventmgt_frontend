@@ -13,15 +13,9 @@ namespace Mediadreams\MdEventmgtFrontend\Event;
  * (c) 2022 Christoph Daecke <typo3@mediadreams.org>
  */
 
-
 /**
  * Class UpdateActionBeforeSaveEvent
  * This event is triggered in UpdateAction() before the event is saved.
  * All changes on the event will be saved afterwards.
- *
- * @package Mediadreams\MdEventmgtFrontend\Event
  */
-final class UpdateActionBeforeSaveEvent extends BaseEvent
-{
-
-}
+final class UpdateActionBeforeSaveEvent extends BaseEvent {}

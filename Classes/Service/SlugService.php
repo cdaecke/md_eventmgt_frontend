@@ -20,7 +20,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class SlugService
- * @package Mediadreams\MdEventmgtFrontend\Service
  */
 class SlugService
 {
@@ -55,7 +54,7 @@ class SlugService
             'title' => $obj->getTitle(),
         ];
 
-        $slug = $this->slugHelper->generate($recordData, $obj->getPid());
+        $slug = $this->slugHelper->generate($recordData, (int)$obj->getPid());
 
         $state = RecordStateFactory::forName($this->tableName)
             ->fromArray($recordData, $obj->getPid(), $obj->getUid());

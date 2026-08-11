@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file source-language="en" datatype="plaintext" original="EXT:md_eventmgt_frontend/Configuration/Sets/labels.xlf" date="2026-08-05T00:00:00Z" product-name="md_eventmgt_frontend">
+		<header/>
+		<body>
+			<trans-unit id="label" resname="label">
+				<source>Frontend for ext:sf_event_mgt</source>
+			</trans-unit>
+
+			<trans-unit id="categories.md_eventmgt_frontend" resname="categories.md_eventmgt_frontend">
+				<source>Event Management Frontend</source>
+			</trans-unit>
+			<trans-unit id="categories.md_eventmgt_frontend.templates" resname="categories.md_eventmgt_frontend.templates">
+				<source>Templates</source>
+			</trans-unit>
+
+			<trans-unit id="settings.md_eventmgt_frontend.view.templateRootPath" resname="settings.md_eventmgt_frontend.view.templateRootPath">
+				<source>Path of custom Fluid Templates for the extension</source>
+			</trans-unit>
+			<trans-unit id="settings.md_eventmgt_frontend.view.partialRootPath" resname="settings.md_eventmgt_frontend.view.partialRootPath">
+				<source>Path of custom Fluid Partials for the extension</source>
+			</trans-unit>
+			<trans-unit id="settings.md_eventmgt_frontend.view.layoutRootPath" resname="settings.md_eventmgt_frontend.view.layoutRootPath">
+				<source>Path of custom Fluid Layouts for the extension</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

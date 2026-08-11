@@ -21,36 +21,21 @@ use Mediadreams\MdEventmgtFrontend\Event\DeleteActionBeforeDeleteEvent;
 use Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSaveEvent;
 use Mediadreams\MdEventmgtFrontend\Service\SlugService;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Html\SanitizerBuilderFactory;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Attribute\IgnoreValidation;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class EventController
- * @package Mediadreams\MdEventmgtFrontend\Controller
  */
 class EventController extends AbstractController
 {
-    protected EventCacheService $eventCacheService;
-    protected PersistenceManager $persistenceManager;
-    protected SlugService $slugService;
-
-    public function injectEventCacheService(EventCacheService $eventCacheService): void
-    {
-        $this->eventCacheService = $eventCacheService;
-    }
-
-    public function injectPersistenceManager(PersistenceManager $persistenceManager): void
-    {
-        $this->persistenceManager = $persistenceManager;
-    }
-
-    public function injectSlugService(SlugService $slugService): void
-    {
-        $this->slugService = $slugService;
-    }
-
+    public function __construct(protected EventCacheService $eventCacheService, protected PersistenceManager $persistenceManager, protected SlugService $slugService) {}
     /**
      * This will be called, if user is not logged in
      */
@@ -67,7 +52,7 @@ class EventController extends AbstractController
     public function listAction(): ResponseInterface
     {
         $this->eventRepository->setDefaultOrderings(['startdate' => QueryInterface::ORDER_DESCENDING]);
-        $events = $this->eventRepository->findByMdEventmgtFeuser($this->feUser['uid']);
+        $events = $this->eventRepository->findBy(['mdEventmgtFeuser' => $this->feUser['uid']]);
         $this->assignPagination($events);
 
         return $this->htmlResponse();
@@ -106,6 +91,7 @@ class EventController extends AbstractController
     {
         $event->setMdEventmgtFeuserByUid($this->feUser['uid']);
         $this->setTime($event);
+        $this->sanitizeUserProvidedHtml($event);
 
         // PSR-14 Event
         $this->eventDispatcher->dispatch(new CreateActionBeforeSaveEvent($event, $this, $this->settings, $this->request));
@@ -127,10 +113,10 @@ class EventController extends AbstractController
         // Send notification emails
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
 
-        $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
+        $this->eventCacheService->flushEventCache((int)$event->getUid(), (int)$event->getPid());
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('controller.created', 'md_eventmgt_frontend'),
+            LocalizationUtility::translate('controller.created', 'MdEventmgtFrontend') ?? '',
             '',
             ContextualFeedbackSeverity::OK
         );
@@ -142,10 +128,9 @@ class EventController extends AbstractController
      * action edit
      *
      * @param Event $event
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("event")
      * @return ResponseInterface
      */
-    public function editAction(Event $event): ResponseInterface
+    public function editAction(#[IgnoreValidation] Event $event): ResponseInterface
     {
         $this->checkAccess($event);
 
@@ -173,6 +158,7 @@ class EventController extends AbstractController
         $this->checkAccess($event);
 
         $this->setTime($event);
+        $this->sanitizeUserProvidedHtml($event);
 
         // PSR-14 Event
         $this->eventDispatcher->dispatch(new UpdateActionBeforeSaveEvent($event, $this, $this->settings, $this->request));
@@ -182,15 +168,44 @@ class EventController extends AbstractController
         // Send notification emails
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
 
-        $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
+        $this->eventCacheService->flushEventCache((int)$event->getUid(), (int)$event->getPid());
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('controller.updated', 'md_eventmgt_frontend'),
+            LocalizationUtility::translate('controller.updated', 'MdEventmgtFrontend') ?? '',
             '',
             ContextualFeedbackSeverity::OK
         );
 
         return $this->redirect('list');
+    }
+
+    /**
+     * Reject deletion requests that were not sent as POST.
+     *
+     * A GET-triggerable delete allows the action to be invoked by a mere link or an <img> tag -
+     * something an attacker can embed anywhere a logged-in user's browser will load it, using
+     * that user's own session to delete their own data without their intent (CSRF). Requiring
+     * POST closes that off: browsers can only ever send POST via an actual form submission, and
+     * SameSite=Lax (TYPO3's default fe_typo_user cookie policy) withholds the session cookie from
+     * cross-site POST submissions.
+     *
+     * @throws \TYPO3\CMS\Core\Http\PropagateResponseException
+     */
+    public function initializeDeleteAction(): void
+    {
+        if ($this->request->getMethod() !== 'POST') {
+            $this->addFlashMessage(
+                LocalizationUtility::translate('controller.invalid_request', 'MdEventmgtFrontend') ?? '',
+                '',
+                ContextualFeedbackSeverity::ERROR
+            );
+
+            $uri = $this->uriBuilder->uriFor('list');
+            $response = $this->responseFactory->createResponse(307)
+                ->withHeader('Location', $uri);
+
+            throw new PropagateResponseException($response, 307);
+        }
     }
 
     /**
@@ -210,16 +225,31 @@ class EventController extends AbstractController
         $this->sendEmails(['event' => $event, 'feUser' => $this->feUser]);
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('controller.deleted', 'md_eventmgt_frontend'),
+            LocalizationUtility::translate('controller.deleted', 'MdEventmgtFrontend') ?? '',
             '',
             ContextualFeedbackSeverity::OK
         );
 
         $this->eventRepository->remove($event);
 
-        $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
+        $this->eventCacheService->flushEventCache((int)$event->getUid(), (int)$event->getPid());
 
         return $this->redirect('list');
     }
 
+    /**
+     * Sanitize the free-text fields the frontend form offers for editing (teaser/description/program).
+     * Extbase persistence bypasses the DataHandler/RTE transformation pipeline entirely, so nothing
+     * else strips dangerous markup before this is stored - and sf_event_mgt's own Detail template
+     * renders description/program via f:format.html (escaping disabled), so this needs to happen on
+     * write, not on read: we don't control sf_event_mgt's templates or any other consumer of this data.
+     */
+    private function sanitizeUserProvidedHtml(Event $event): void
+    {
+        $sanitizer = GeneralUtility::makeInstance(SanitizerBuilderFactory::class)->build('default')->build();
+
+        $event->setTeaser($sanitizer->sanitize($event->getTeaser()));
+        $event->setDescription($sanitizer->sanitize($event->getDescription()));
+        $event->setProgram($sanitizer->sanitize($event->getProgram()));
+    }
 }
