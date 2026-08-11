@@ -6,8 +6,8 @@ Templates are ready to use with the [bootstrap framework](https://getbootstrap.c
 
 ## Requirements
 
-- TYPO3 13.4
-- ext:sf_event_mgt 8.0
+- TYPO3 14.3
+- ext:sf_event_mgt 9.0
 
 ## Installation
 
@@ -19,25 +19,25 @@ Templates are ready to use with the [bootstrap framework](https://getbootstrap.c
 
 - Add the pluign ``Event management frontend`` on a page, which is restricted by the frontend user login
 - Select a storage page in the plugin-tab in the field ``Record Storage Page``
-    - Tab `Settings`
-        - `Event type `: Select whether the events are whole day events (`All day events`), or have a start and end date and time (`Start- and end date and time`).
-        - `Parent category`: If selected, all subcategories of this will be shown in the template.
-        - `Location storage page`: Event locations on this page will be shown in the template.
-        - `Organisator storage page`: Event organisers on this page will be shown in the template.
-        - `Speaker storage page`: Event speakers on this page will be shown in the template.
-        - `Related events storage page`: Events on this page will be shown in the template.
-    - Tab `Email`
-        - `Enable email notification`: If checked, you can add email notifications for chosen actions.
-        - `Email address of sender`: Email from address.
-        - `Name of sender`: Email from name.
-        - `Email receivers`: Add as many email receivers as you want.
-            - `Email for action`: Select the action, where you want to send the email.
-            - `Email address of receiver`: Enter the email address of receiver (Email to address).
-            - `Name of receiver`: Enter the name of the receiver (Email to name).
-            - `Subject of email`: The subject of the email (Email subject).
-            - `Text in email`: The text for the email (Email body).
-    - Tab `Template`:
-        - `Template layout`: Select a defined template (see chapter `Template layouts` how to define template layouts).
+  - Tab `Settings`
+    - `Event type`: Select whether the events are whole day events (`All day events`), or have a start and end date and time (`Start- and end date and time`).
+    - `Parent category`: If selected, all subcategories of this will be shown in the template.
+    - `Location storage page`: Event locations on this page will be shown in the template.
+    - `Organisator storage page`: Event organisers on this page will be shown in the template.
+    - `Speaker storage page`: Event speakers on this page will be shown in the template.
+    - `Related events storage page`: Events on this page will be shown in the template.
+  - Tab `Email`
+    - `Enable email notification`: If checked, you can add email notifications for chosen actions.
+    - `Email address of sender`: Email from address.
+    - `Name of sender`: Email from name.
+    - `Email receivers`: Add as many email receivers as you want.
+      - `Email for action`: Select the action, where you want to send the email.
+      - `Email address of receiver`: Enter the email address of receiver (Email to address).
+      - `Name of receiver`: Enter the name of the receiver (Email to name).
+      - `Subject of email`: The subject of the email (Email subject).
+      - `Text in email`: The text for the email (Email body).
+  - Tab `Template`:
+    - `Template layout`: Select a defined template (see chapter `Template layouts` how to define template layouts).
 - Now a frontend user is able to add, edit and delete own records
 
 ### Template layouts
@@ -57,10 +57,10 @@ tx_mdeventmgt_frontend {
 
 Following PSR-14 events are available:
 
-- `Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSave`: Called just before saving a new record
+- `Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent`: Called just before saving a new record
 - `Mediadreams\MdEventmgtFrontend\Event\CreateActionAfterPersistEvent`: Called after a new record was saved (new record Id is available)
-- `Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSave`: Called just before an existig record will be updated
-- `Mediadreams\MdEventmgtFrontend\Event\DeleteActionBeforeDelete`: Called just before a record will be deleted
+- `Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSaveEvent`: Called just before an existig record will be updated
+- `Mediadreams\MdEventmgtFrontend\Event\DeleteActionBeforeDeleteEvent`: Called just before a record will be deleted
 
 ### Register an example event
 
@@ -71,9 +71,9 @@ services:
   Vendor\Extension\EventListener\MyListener:
     tags:
       - name: event.listener
-        identifier: 'ext-mdnewsfrontend/enrichEvent'
+        identifier: 'ext-mdeventmgtfrontend/enrichEvent'
         method: 'enrichEvent'
-        event: Mediadreams\MdNewsfrontend\Event\CreateActionBeforeSaveEvent
+        event: Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent
 ```
 
 Add the class `Vendor\Extension\EventListener\MyListener` with the method `enrichEvent` in your extension:
@@ -81,7 +81,7 @@ Add the class `Vendor\Extension\EventListener\MyListener` with the method `enric
 ```php
 namespace Vendor\Extension\EventListener;
 
-use Mediadreams\MdNewsfrontend\Event\CreateActionBeforeSaveEvent;
+use Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent;
 
 final class MyListener
 {
@@ -101,6 +101,7 @@ final class MyListener
 ```
 
 ## Bugs and Known Issues
+
 If you find a bug, it would be nice if you add an issue on [Github](https://github.com/cdaecke/md_eventmgt_frontend/issues).
 
 # THANKS
