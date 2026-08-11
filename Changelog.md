@@ -11,7 +11,7 @@
 - [TASK] Add PHPStan, Rector, Fractor and PHP-CS-Fixer tooling and fix all findings surfaced by them
 
 All changes
-https://github.com/cdaecke/md_eventmgt_frontend/compare/3.0.1...4.0.0>
+<https://github.com/cdaecke/md_eventmgt_frontend/compare/3.0.1...4.0.0>
 
 # Version 3.0.1 (2026-07-30)
 
