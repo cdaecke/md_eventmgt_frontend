@@ -208,16 +208,15 @@ abstract class AbstractController extends ActionController
         $accessGranted = $ownerUid > 0 && $ownerUid === (int)($this->feUser['uid'] ?? 0);
 
         // PSR-14 Event
-        $checkAccessEvent = $this->eventDispatcher->dispatch(
-            new CheckAccessEvent(
-                $event,
-                $this->feUser,
-                $this->request->getControllerActionName(),
-                $this->settings,
-                $this->request,
-                $accessGranted
-            )
+        $checkAccessEvent = new CheckAccessEvent(
+            $event,
+            $this->feUser,
+            $this->request->getControllerActionName(),
+            $this->settings,
+            $this->request,
+            $accessGranted
         );
+        $this->eventDispatcher->dispatch($checkAccessEvent);
 
         if (!$checkAccessEvent->isAccessGranted()) {
             $this->addFlashMessage(

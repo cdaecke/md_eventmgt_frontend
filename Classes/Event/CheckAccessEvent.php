@@ -22,8 +22,6 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
  * edit, update or delete an event. By default only the owner of the event has access.
  * Listeners can grant (or revoke) access by calling `setAccessGranted()`.
  * If several listeners are registered, the last call of `setAccessGranted()` wins.
- *
- * @package Mediadreams\MdEventmgtFrontend\Event
  */
 final class CheckAccessEvent
 {
