@@ -19,6 +19,7 @@ use DERHANSEN\SfEventMgt\Domain\Repository\SpeakerRepository;
 use Mediadreams\MdEventmgtFrontend\Domain\Model\Event;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\CategoryRepository;
 use Mediadreams\MdEventmgtFrontend\Domain\Repository\EventRepository;
+use Mediadreams\MdEventmgtFrontend\Event\CheckAccessEvent;
 use Mediadreams\MdEventmgtFrontend\Service\EmailService;
 use Mediadreams\MdEventmgtFrontend\TypeConverter\FloatConverter;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
@@ -195,13 +196,29 @@ abstract class AbstractController extends ActionController
     /**
      * Check, if event belongs to user
      * If event does not belong to user, redirect to list action
+     * The PSR-14 event `CheckAccessEvent` allows to modify the result of this check.
      *
      * @param Event $event
      * @throws PropagateResponseException
      */
     protected function checkAccess(Event $event): void
     {
-        if ($event->getMdEventmgtFeuser()?->getUid() !== $this->feUser['uid']) {
+        // Events without owner (or a user without uid) never grant access by default
+        $ownerUid = (int)$event->getMdEventmgtFeuser()?->getUid();
+        $accessGranted = $ownerUid > 0 && $ownerUid === (int)($this->feUser['uid'] ?? 0);
+
+        // PSR-14 Event
+        $checkAccessEvent = new CheckAccessEvent(
+            $event,
+            $this->feUser,
+            $this->request->getControllerActionName(),
+            $this->settings,
+            $this->request,
+            $accessGranted
+        );
+        $this->eventDispatcher->dispatch($checkAccessEvent);
+
+        if (!$checkAccessEvent->isAccessGranted()) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('controller.access_error', 'MdEventmgtFrontend') ?? '',
                 '',

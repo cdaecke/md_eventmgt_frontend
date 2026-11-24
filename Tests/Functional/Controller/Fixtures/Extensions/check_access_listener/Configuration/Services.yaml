@@ -1,0 +1,6 @@
+services:
+  Mediadreams\MdEventmgtFrontend\Tests\Functional\Controller\Fixtures\EventListener\CheckAccessEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'check-access-listener/check-access'
+        event: Mediadreams\MdEventmgtFrontend\Event\CheckAccessEvent
