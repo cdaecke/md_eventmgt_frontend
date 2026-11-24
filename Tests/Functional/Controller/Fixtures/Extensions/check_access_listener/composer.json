@@ -1,0 +1,14 @@
+{
+	"name": "mediadreams/check-access-listener",
+	"type": "typo3-cms-extension",
+	"description": "Test fixture: registers a listener for CheckAccessEvent",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"mediadreams/md_eventmgt_frontend": "*"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "check_access_listener"
+		}
+	}
+}
