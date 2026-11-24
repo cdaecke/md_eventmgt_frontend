@@ -92,7 +92,7 @@
 		"typo3/cms": {
 			"extension-key": "md_eventmgt_frontend",
 			"web-dir": ".Build/public",
-			"version": "4.0.0",
+			"version": "4.1.0",
 			"Package": {
 				"providesPackages": {}
 			}

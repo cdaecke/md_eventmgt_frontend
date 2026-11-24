@@ -1,3 +1,17 @@
+Version 4.1.0 (2026-11-24)
+
+    [FEATURE] add PSR-14 event CheckAccessEvent to modify the access check for edit, update and delete actions
+    [DOCS] fix names of PSR-14 events and namespace in listener example
+
+All changes https://github.com/cdaecke/md_eventmgt_frontend/compare/4.0.0...4.0.1
+
+Version 3.1.0 (2026-11-24)
+
+    [FEATURE] add PSR-14 event CheckAccessEvent to modify the access check for edit, update and delete actions
+    [DOCS] fix names of PSR-14 events and namespace in listener example
+
+All changes https://github.com/cdaecke/md_eventmgt_frontend/compare/3.0.1...3.1.0
+
 # Version 4.0.0 (2026-08-10)
 
 - [FEATURE] TYPO3 v14 compatibility
