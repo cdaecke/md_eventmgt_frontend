@@ -59,7 +59,7 @@ Following PSR-14 events are available:
 
 - `Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent`: Called just before saving a new record
 - `Mediadreams\MdEventmgtFrontend\Event\CreateActionAfterPersistEvent`: Called after a new record was saved (new record Id is available)
-- `Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSaveEvent`: Called just before an existig record will be updated
+- `Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSaveEvent`: Called just before an existing record will be updated
 - `Mediadreams\MdEventmgtFrontend\Event\DeleteActionBeforeDeleteEvent`: Called just before a record will be deleted
 - `Mediadreams\MdEventmgtFrontend\Event\CheckAccessEvent`: Called when it is checked, if the current user is allowed to edit, update or delete a record. By default only the owner has access. Use `setAccessGranted()` to modify the result.
 
