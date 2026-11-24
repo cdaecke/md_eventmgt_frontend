@@ -57,10 +57,10 @@ tx_mdeventmgt_frontend {
 
 Following PSR-14 events are available:
 
-- `Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSave`: Called just before saving a new record
+- `Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent`: Called just before saving a new record
 - `Mediadreams\MdEventmgtFrontend\Event\CreateActionAfterPersistEvent`: Called after a new record was saved (new record Id is available)
-- `Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSave`: Called just before an existig record will be updated
-- `Mediadreams\MdEventmgtFrontend\Event\DeleteActionBeforeDelete`: Called just before a record will be deleted
+- `Mediadreams\MdEventmgtFrontend\Event\UpdateActionBeforeSaveEvent`: Called just before an existing record will be updated
+- `Mediadreams\MdEventmgtFrontend\Event\DeleteActionBeforeDeleteEvent`: Called just before a record will be deleted
 - `Mediadreams\MdEventmgtFrontend\Event\CheckAccessEvent`: Called when it is checked, if the current user is allowed to edit, update or delete a record. By default only the owner has access. Use `setAccessGranted()` to modify the result.
 
 ### Register an example event
@@ -72,9 +72,9 @@ services:
   Vendor\Extension\EventListener\MyListener:
     tags:
       - name: event.listener
-        identifier: 'ext-mdnewsfrontend/enrichEvent'
+        identifier: 'ext-mdeventmgtfrontend/enrichEvent'
         method: 'enrichEvent'
-        event: Mediadreams\MdNewsfrontend\Event\CreateActionBeforeSaveEvent
+        event: Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent
 ```
 
 Add the class `Vendor\Extension\EventListener\MyListener` with the method `enrichEvent` in your extension:
@@ -82,7 +82,7 @@ Add the class `Vendor\Extension\EventListener\MyListener` with the method `enric
 ```php
 namespace Vendor\Extension\EventListener;
 
-use Mediadreams\MdNewsfrontend\Event\CreateActionBeforeSaveEvent;
+use Mediadreams\MdEventmgtFrontend\Event\CreateActionBeforeSaveEvent;
 
 final class MyListener
 {
